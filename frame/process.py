@@ -6,7 +6,16 @@
 
 from .read_block import read_block;
 
+#from .calc_dominators import calc_dominators;
+from .calc_immediate_dominators import calc_immediate_dominators;
+from .calc_data_flow import calc_data_flow;
+
+from .build_phi_nodes import build_phi_nodes;
+
+from .ExpressionTable.self import ExpressionTable;
+
 from .dotout.control import dotout_control;
+from .dotout.idoms import dotout_idoms;
 from .dotout.data import dotout_data;
 
 def process_frame(t, p):
@@ -55,48 +64,26 @@ def process_frame(t, p):
 #	dotout_control(all_blocks);
 #	assert(not "CHECK");
 	
-	# build dominator tree:
-	assert(not "TODO");
+	calc_immediate_dominators(all_blocks);
+#	calc_dominance_frontiers(all_blocks);
 	
-	# calculate dominator frontiner
-	assert(not "TODO");
+#	dotout_idoms(all_blocks);
+#	assert(not "CHECK");
 	
-	# global_expressions = ExpressionTable();
-	assert(not "TODO");
+	global_expressions = ExpressionTable();
 	
-	# determine the needs and provides for each block
-	assert(not "TODO");
+	for b in all_blocks: b.skim_i2is();
 	
-	# for each block:
-		# number each of the provides ("%%vr%i_%i", _, id(block))
+	calc_data_flow(all_blocks);
 	
-	assert(not "TODO");
+	build_phi_nodes(all_blocks, global_expressions);
 	
-	# for each block:
-		# if block as no parents:
-			# pass
-		# elif block has one parent:
-			# for each need:
-				# ask parent for need, save response
-		# else:
-			# for each need:
-				# phi = set()
-				# for each parent:
-					# phi.add(parent.get(need))
-				# if len(phi) ==1:
-					# save as thing
-				# elif not new phi?
-					# save as chached phi
-				# else:
-					# make and save new phi
-			
-	assert(not "TODO");
-	
-	dotout_data(all_blocks);
+	dotout_data(all_blocks, global_expressions);
 	assert(not "CHECK");
 	
 	# for each block: (parents then children on dominator tree)
 		# block.expressions = immedate-dominator.expressions.copy();
+			# if start block: use global_expressions instead
 		# block.optimize();
 	assert(not "TODO");
 	

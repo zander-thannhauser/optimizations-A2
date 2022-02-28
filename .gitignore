@@ -2,3 +2,7 @@ control.gz
 control.png
 data.png
 __pycache__/
+*.gz
+*.pdf
+data.txt
+*.png

@@ -6,10 +6,5 @@ def Block_init(self, label, instructions, children):
 	self.parents = [];
 	self.children = children;
 	
-	self.immdom = None;
+	self.changes = [];
 	
-	self.needs = {};    # register name -> subscript string
-	self.provides = {}; # register name -> subscript string
-	
-	self.expressions = None;
-

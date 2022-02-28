@@ -5,13 +5,11 @@ from .Block.self import Block;
 from .Instruction.self import Instruction;
 
 def read_block(t):
-	puts("read_block");
-	
 	label = ""
 	
 	if (t.token[0] == '.'):
 		label = t.token;
-		printf("label == \"%s\"\n", label);
+		# printf("label == \"%s\"\n", label);
 		assert(next(t) == ":");
 		t.next();
 	
@@ -43,7 +41,7 @@ def read_block(t):
 				t.next();
 				outs.append(t.token);
 				t.next();
-		print(operation, ins, outs);
+#		print(operation, ins, outs);
 		instructions.append(Instruction(operation, ins, outs));
 		if operation == "ret":
 			children = [];
@@ -57,4 +55,8 @@ def read_block(t):
 			break;
 	
 	return Block(label, instructions, children);
+
+
+
+
 

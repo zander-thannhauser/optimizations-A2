@@ -15,7 +15,8 @@ def read_block(t):
 	
 	instructions = [];
 	
-	children = [None]; # indicates we also want fallthrough
+	children = ["fallthrough"]; # indicates we also want fallthrough
+	assert(not "TODO");
 	
 	while t.token and (t.token[0] != '.'):
 		ins = []
@@ -41,6 +42,8 @@ def read_block(t):
 				t.next();
 				outs.append(t.token);
 				t.next();
+		if operation in ["store", "storeAI", "storeAO"]:
+			ins += outs; outs = [];
 #		print(operation, ins, outs);
 		instructions.append(Instruction(operation, ins, outs));
 		if operation == "ret":

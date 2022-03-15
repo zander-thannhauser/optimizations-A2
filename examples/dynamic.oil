@@ -8,4 +8,3 @@
 	   .string    .char_rformat, "%c"
 	   .string  .string_rformat, "%s"
 .text
-	.frame main, 1824

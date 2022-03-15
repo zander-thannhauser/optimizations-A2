@@ -6,3 +6,5 @@ __pycache__/
 *.pdf
 data.txt
 *.png
+junk/
+gen

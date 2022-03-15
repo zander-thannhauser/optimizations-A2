@@ -1,5 +1,5 @@
 
-from frame.process import process_frame;
+from frame import process_frame;
 
 def process_text(t, p):
 	if (t.token == ".text"):

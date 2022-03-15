@@ -1,24 +1,21 @@
 
-# from stdio import printf, puts;
+from sys import argv;
 
-#from Instruction import Instruction;
-#from Block import Block;
+from stdio import fprintf, stderr;
 
-from .read_block import read_block;
+from heapq import heappop, heappush;
 
-#from .calc_dominators import calc_dominators;
-from .calc_immediate_dominators import calc_immediate_dominators;
-from .calc_data_flow import calc_data_flow;
+from Instruction.self import Instruction;
 
-from .build_phi_nodes import build_phi_nodes;
+from Block.self import Block;
 
-from .ExpressionTable.self import ExpressionTable;
+from block import read_block;
 
-from .dotout.control import dotout_control;
-from .dotout.idoms import dotout_idoms;
-from .dotout.data import dotout_data;
+from dotout import dotout;
 
-def process_frame(t, p):
+#from phases.determine_rank import determine_rank;
+
+def setup_start_block(t):
 	assert(t.token == ".frame");
 	
 	name = next(t);
@@ -29,44 +26,104 @@ def process_frame(t, p):
 	
 	while next(t) == ",":
 		reg = next(t);
-		printf("arg += \"%s\"\n", reg);
 		assert(reg[:3] == "%vr");
 		args.append(reg);
 	
-	p.asm(".frame", [name, framesize], prefix = "");
+	frame = Instruction(".frame", [name, framesize, *args], []);
+	start = Block("(.frame)", [frame], ["(fallthrough)"]);
 	
+	return start;
+
+def setup_exit_block():
+	ret = Instruction("ret", [], []);
+	exit = Block("(return)", [ret], []);
+	return exit;
+
+def read_all_blocks(t, start, exit):
 	all_blocks = [];
-	blocks_by_name = {};
 	
-	assert(not "add start block");
-	
-	# read blocks:
 	while t.token and t.token != ".frame":
 		b = read_block(t);
 		all_blocks.append(b);
+	
+	first = all_blocks[0];
+	start.children.append(first);
+	first.parents.append(start);
+	
+	all_blocks.insert(0, start);
+	all_blocks.append(exit);
+	
+	return all_blocks;
+
+def resolve_references(all_blocks):
+	blocks_by_name = {};
+	
+	for b in all_blocks:
 		if b.label:
-			assert(b.label not in blocks_by_name);
 			blocks_by_name[b.label] = b;
 	
-#	assert(not "add return block");
-#	
-#	# resolve references:
-#	for i, b in enumerate(all_blocks):
-#		children = [];
-#		for c in b.children:
-#			if c is "fallthrough":
-#				children.append(all_blocks[i + 1]);
-#			elif c is "return":
-#				assert(not "TODO");
-#			elif c in blocks_by_name:
-#				children.append(blocks_by_name[c]);
-#			else:
-#				fprintf(stderr, "%s: unresolved reference to '%s'!\n", argv0, c);
-#				exit(1);
-#		for c in children:
-#			c.parents.append(b);
-#		b.children = children;
-#	
+	for i, b in enumerate(all_blocks):
+		children = [];
+		for c in b.children_labels:
+			if c == "(fallthrough)":
+				children.append(all_blocks[i + 1]);
+			elif c in blocks_by_name:
+				children.append(blocks_by_name[c]);
+			else:
+				fprintf(stderr, "%s: unresolved reference to '%s'!\n", argv[0], c);
+				exit(1);
+		for c in children:
+			c.parents.append(b);
+		b.children = children;
+
+counter = 1;
+
+def reverse_postorder_rank(b):
+	global counter;
+	if b.rank: return;
+	b.rank = 1;
+	for c in b.parents: reverse_postorder_rank(c);
+	b.rank = counter;
+	counter += 1;
+
+def print_asm(p):
+	assert(not "TODO");
+
+def process_frame(t, p):
+	start = setup_start_block(t);
+	
+	exit = setup_exit_block();
+	
+	all_blocks = read_all_blocks(t, start, exit);
+	
+	resolve_references(all_blocks);
+	
+	dotout(all_blocks);
+	
+	reverse_postorder_rank(exit);
+	
+	todo = [
+		# (1, start),
+	];
+	
+	phases = {
+#		1: determine_rank,
+	};
+	
+	dotout(all_blocks);
+	
+	while len(todo):
+		# print(todo);
+		phase_num, block = heappop(todo);
+		addmes = phases[phase_num](block);
+		dotout(all_blocks);
+		for me in addmes:
+			heappush(todo, me);
+	
+	# print_asm(p);
+	# assert(not "TODO");
+	
+#	all_blocks = [];
 #	start.idom = start;
 #	start.expression_tables = ExpressionTable();
 	
@@ -118,7 +175,7 @@ def process_frame(t, p):
 		# assert(not unreachable)
 		# output assembly for this block with a child afterwards
 	
-	assert(not "TODO");
+#	assert(not "TODO");
 	
 ##	dotout_control(all_blocks);
 ##	assert(not "CHECK");

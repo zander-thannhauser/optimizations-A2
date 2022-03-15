@@ -1,8 +1,9 @@
 
 from stdio import printf, puts;
 
-from .Block.self import Block;
-from .Instruction.self import Instruction;
+from Block.self import Block;
+
+from Instruction.self import Instruction;
 
 def read_block(t):
 	label = ""
@@ -15,8 +16,7 @@ def read_block(t):
 	
 	instructions = [];
 	
-	children = ["fallthrough"]; # indicates we also want fallthrough
-	assert(not "TODO");
+	children = ["(fallthrough)"]; # indicates we also want fallthrough
 	
 	while t.token and (t.token[0] != '.'):
 		ins = []
@@ -24,6 +24,7 @@ def read_block(t):
 		operation = t.token;
 		# printf("operation == \"%s\"\n", operation);
 		t.next();
+		
 		if operation not in ["ret", "nop", "jumpI"]:
 			ins.append(t.token);
 			t.next();
@@ -31,8 +32,9 @@ def read_block(t):
 				t.next();
 				ins.append(t.token);
 				t.next();
-		if operation not in ["ret", "nop", "iwrite", "fwrite", "swrite",
-				"iread", "iret", "call"]:
+		
+		if operation not in \
+				["ret", "nop", "iwrite", "fwrite", "swrite", "iread", "iret", "call"]:
 			# printf("t.token == \"%s\"\n", t.token);
 			assert(t.token in ["->", "=>"]);
 			t.next();
@@ -42,12 +44,16 @@ def read_block(t):
 				t.next();
 				outs.append(t.token);
 				t.next();
+		
 		if operation in ["store", "storeAI", "storeAO"]:
 			ins += outs; outs = [];
-#		print(operation, ins, outs);
+		
+		# print(operation, ins, outs);
+		
 		instructions.append(Instruction(operation, ins, outs));
+		
 		if operation == "ret":
-			children = [];
+			children = ["(return)"];
 		elif operation == "jumpI":
 			children.append(outs[0]);
 		elif operation == "jump":
@@ -58,6 +64,17 @@ def read_block(t):
 			break;
 	
 	return Block(label, instructions, children);
+
+
+
+
+
+
+
+
+
+
+
 
 
 

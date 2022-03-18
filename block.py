@@ -48,14 +48,16 @@ def read_block(t):
 		if operation in ["store", "storeAI", "storeAO"]:
 			ins += outs; outs = [];
 		
+		if operation == "ret":
+			operation = "jumpI";
+			outs = ["(return)"];
+		
 		# print(operation, ins, outs);
 		
 		instructions.append(Instruction(operation, ins, outs));
 		
-		if operation == "ret":
-			children = ["(return)"];
-		elif operation == "jumpI":
-			children.append(outs[0]);
+		if operation == "jumpI":
+			children = [outs[0]];
 		elif operation == "jump":
 			assert(not "NOPE");
 		elif operation in ["cbr", "cbrne", \

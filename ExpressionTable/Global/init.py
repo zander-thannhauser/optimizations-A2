@@ -1,7 +1,7 @@
 
-def Global_init(self, reg, version):
+def Global_init(self, reg, source):
 	self.register = reg;
-	self.version = version;
+	self.source = source;
 
 
 

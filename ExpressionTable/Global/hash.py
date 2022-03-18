@@ -1,6 +1,6 @@
 
 def Global_hash(self):
-	return hash(("global", self.register, self.version));
+	return hash(("global", self.register, self.source));
 
 
 

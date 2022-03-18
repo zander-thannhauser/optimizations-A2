@@ -1,6 +1,6 @@
 
 def Phi_hash(self):
-	return hash(("phi", self.register, *self.versions));
+	return hash(("phi", self.register, *self.sources));
 
 
 

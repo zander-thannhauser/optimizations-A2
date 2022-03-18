@@ -13,6 +13,14 @@ def dprint(string):
 	global depth;
 	print(" " * depth + string);
 
+def enter(string):
+	dprint(string);
+	indent();
+
+def exit(string):
+	dprint(string);
+	unindent();
+
 def dpv():
 	assert(not "TODO");
 

@@ -1,7 +1,7 @@
 
-def Phi_init(self, register, versions):
+def Phi_init(self, register, sources):
 	self.register = register;
-	self.versions = versions;
+	self.sources = sources;
 
 
 

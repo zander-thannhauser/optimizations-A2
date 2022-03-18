@@ -1,13 +1,13 @@
 
-from .counter import counter;
-
 from debug import *;
 
-def dotout_attributes(all_blocks, **_):
+from phases.self import Phase;
+
+def AttributePhase_dotout(self, all_blocks, **_):
 	
-	enter("dotout_attributes()");
+	enter("AttributePhase.dotout()");
 	
-	stream = open(f"gen/{counter[0]}.txt", "w");
+	stream = open(f"gen/{Phase.counter}.txt", "w");
 	
 	print("""
 digraph mygraph {
@@ -34,9 +34,8 @@ digraph mygraph {
 	
 	stream.close();
 	
-	counter[0] += 1;
+	Phase.counter += 1;
 	
 	exit("return;");
-	
 
 

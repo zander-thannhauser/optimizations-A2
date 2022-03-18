@@ -1,13 +1,15 @@
 
 from debug import *;
 
-def attribute_phase(block, n, **_):
-	
-	enter("attribute_phase(block.rank = {block.rank})");
+from .self import AttributePhase;
+
+def AttributePhase_process(self, all_blocks, **_):
+	enter(f"AttributePhase.process(self.block.rank = {self.block.rank})");
 	
 	todo = [];
 	
-	hue = (block.rank - 1) / n;
+	block = self.block;
+	hue = (block.rank - 1) / len(all_blocks);
 	
 	block.attributes["label"] = f"rank = {block.rank}";
 	block.attributes["style"] = "filled";
@@ -15,9 +17,10 @@ def attribute_phase(block, n, **_):
 	
 	for child in block.children:
 		if "attributes" not in child.has_done:
-			todo.append((1, child));
+			todo.append(AttributePhase(child));
 			child.has_done.add("attributes");
 	
-	exit("return {todo}");
-	
+	exit(f"return {[str(t) for t in todo]}");
 	return todo;
+
+

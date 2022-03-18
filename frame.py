@@ -11,13 +11,13 @@ from Block.self import Block;
 
 from block import read_block;
 
-from phases.attributes import attribute_phase;
-from phases.inheritance import inheritance_phase;
-from phases.phi import phi_phase;
+from phases.Attribute.self import AttributePhase;
+#from phases.Inheritance.self import InheritancePhase;
+#from phases.Phi.self import PhiPhase;
 
-from dotouts.attributes import dotout_attributes;
-from dotouts.inheritance import dotout_inheritance;
-from dotouts.phi import dotout_phi;
+#from dotouts.attributes import dotout_attributes;
+#from dotouts.inheritance import dotout_inheritance;
+#from dotouts.phi import dotout_phi;
 
 from ExpressionTable.self import ExpressionTable;
 
@@ -116,37 +116,28 @@ def process_frame(t, p):
 	et = ExpressionTable();
 	
 	todo = [
-		(1, start),
-		(2, start),
-		(3, start),
+		AttributePhase(start),
+		# (2, start),
+		# (3, start),
 	];
 	
-	phases = {
-		1: attribute_phase,
-		2: inheritance_phase,
-		3: phi_phase,
-	};
-	
-	dotouts = {
-		1: dotout_attributes,
-		2: dotout_inheritance,
-		3: dotout_phi,
-	};
-	
 	args = {
-		"n": len(all_blocks),
+		"all_blocks": all_blocks,
 		"expression_table": et,
 	};
 	
 	if len(todo):
-		phase_num, block, *_ = todo[0]
-		dotouts[phase_num](all_blocks);
+		todo[0].dotout(**args);
 	
 	while len(todo):
-		# print(todo);
-		phase_num, block = heappop(todo);
-		addmes = phases[phase_num](block, **args);
-		dotouts[phase_num](all_blocks, **args);
+		# print([str(p) for p in todo]);
+		
+		phase = heappop(todo);
+		
+		addmes = phase.process(**args);
+		
+		phase.dotout(**args);
+		
 		for me in addmes:
 			heappush(todo, me);
 	

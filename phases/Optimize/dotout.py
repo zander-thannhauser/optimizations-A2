@@ -3,6 +3,7 @@ from debug import *;
 
 from phases.self import Phase;
 
+from ExpressionTable.self import ExpressionTable;
 from ExpressionTable.Phi.self import Phi;
 from ExpressionTable.Global.self import Global;
 
@@ -17,72 +18,58 @@ digraph mygraph {
 
 	node [shape=record];
 	
-	graph[bgcolor="#444444"];
+	graph [bgcolor=black];
+	
+	edge [color=white]
+	
+	node [fontcolor=white color=white];
 	
 	""", file = stream);
 	
 	valnums = set();
 	
-	for b in all_blocks:
+	for block in all_blocks:
+#	for block in [all_blocks[1]]:
 		
-		bid = id(b);
+		bid = id(block);
 		
-		print(f""" subgraph "cluster_{id(b)}" """ + """ {
+		for valnum in block.given_valnums.values():
+			if valnum not in valnums:
+				exp = expression_table.vntoex(valnum);
+				
+				hue = valnum / ExpressionTable.valcounter;
+				
+				print(f"""
+					\"{valnum}\" [shape=doublecircle color=\"{hue} 1 1\"];
+				""", file = stream);
+				
+				valnums.add(valnum);
+		
+		if "optimized" in block.has_done:
+			inst_keys = [];
 			
-		""", file = stream);
-		
-		fillcolor = b.attributes["fillcolor"];
-		
-		print(f"graph [bgcolor=\"{fillcolor}\"];", file = stream);
-		
-		for r in b.ins:
-			print(f"\"{bid}_in_{r}\" [label=\"{r}\" shape=invtriangle];", file = stream);
-		
-		for r in b.outs:
-			print(f"\"{bid}_out_{r}\" [label=\"{r}\" shape=invtriangle];", file = stream);
-		
-		print(f"\"{bid}_instruction\" [label=\"instructions\" shape=box];", file = stream);
-		
-		for r in b.ins:
-			print(f"\"{bid}_in_{r}\":s -> \"{bid}_instruction\":n;", file = stream);
-		
-		for r in b.outs:
-			print(f"\"{bid}_instruction\":s -> \"{bid}_out_{r}\":n;", file = stream);
-		
-		print("}", file = stream);
-		
-#		for r, valnum in b.given_valnums.items():
-#			if valnum not in valnums:
-#				exp = expression_table.valnum_to_exp(valnum);
-#				style = "shape=circle style=filled color=white"
-#				if type(exp) is Phi:
-#					print(f"""
-#						\"{valnum}\" [label="𝜙" {style}];
-#					""", file = stream);
-#					for src in exp.sources:
-#						fillcolor = src.attributes["fillcolor"];
-#						print(f"""
-#							\"{id(src)}\":\"out_{r[1:]}\":s -> \"{valnum}\"
-#							 [style=dashed color=\"{fillcolor}\"]
-#						""", file = stream);
-#				elif type(exp) is Global:
-#					rpo = exp.source.rpo
-#					print(f"""
-#						\"{valnum}\" [label=<{r}<sub>{rpo}</sub>> {style}];
-#					""", file = stream);
-#					fillcolor = exp.source.attributes["fillcolor"];
-#					print(f"""
-#						\"{id(exp.source)}\":\"out_{r[1:]}\":s -> \"{valnum}\"
-#						 [style=dashed color=\"{fillcolor}\"]
-#					""", file = stream);
-#				else:
-#					assert(not "TODO");
-#				
-#				valnums.add(valnum);
-#			print(f"""
-#				\"{valnum}\" -> \"{id(b)}\":\"in_{r[1:]}\":n
-#				 [style=dashed color=white]
-#			""", file = stream);
+			for inst in block.instructions:
+				me = inst.dotout(stream);
+				inst_keys.append(me);
+			
+			for index, key in enumerate(inst_keys):
+				if index:
+					print(f"\"{inst_keys[index-1]}\":s -> \"{key}\":n;", file = stream);
+		else:
+			for index, inst in enumerate(block.instructions):
+				ins = " | ".join(inst.ins);
+				
+				label = "{{" + inst.op + " | " + ins
+				
+				if inst.out:
+					label += " | ⟶ | " + inst.out
+				
+				label += "}}";
+				
+				print(f"\"{bid}_{index}\" [label=\"{label}\"];", file = stream);
+				
+				if index:
+					print(f"\"{bid}_{index-1}\" -> \"{bid}_{index}\";", file = stream);
 		
 	print("""
 }

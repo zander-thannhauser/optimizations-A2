@@ -50,7 +50,7 @@ digraph mygraph {
 		if (b.given_valnums):
 			for r, valnum in b.given_valnums.items():
 				if valnum not in valnums:
-					exp = expression_table.valnum_to_exp(valnum);
+					exp = expression_table.vntoex(valnum);
 					style = "shape=circle style=filled color=white"
 					if type(exp) is Phi:
 						print(f"""

@@ -5,6 +5,8 @@ from Block.self import Block;
 
 from Instruction.self import Instruction;
 
+from debug import *;
+
 def read_block(t):
 	label = ""
 	
@@ -20,7 +22,7 @@ def read_block(t):
 	
 	while t.token and (t.token[0] != '.'):
 		ins = []
-		outs = []
+		out = None
 		operation = t.token;
 		# printf("operation == \"%s\"\n", operation);
 		t.next();
@@ -38,31 +40,30 @@ def read_block(t):
 			# printf("t.token == \"%s\"\n", t.token);
 			assert(t.token in ["->", "=>"]);
 			t.next();
-			outs.append(t.token);
+			out = t.token;
 			t.next();
-			while t.token == ',':
-				t.next();
-				outs.append(t.token);
-				t.next();
 		
 		if operation in ["store", "storeAI", "storeAO"]:
-			ins += outs; outs = [];
+			ins.append(out); out = None;
 		
 		if operation == "ret":
 			operation = "jumpI";
-			outs = ["(return)"];
+			out = "(return)";
 		
 		# print(operation, ins, outs);
 		
-		instructions.append(Instruction(operation, ins, outs));
+		instructions.append(Instruction(operation, ins, out));
 		
 		if operation == "jumpI":
-			children = [outs[0]];
+			assert(out);
+			children = [out];
 		elif operation == "jump":
 			assert(not "NOPE");
 		elif operation in ["cbr", "cbrne", \
 				"cbr_LT", "cbr_LE", "cbr_GT", "cbr_GE", "cbr_EQ", "cbr_NE"]:
-			children.append(outs[0]);
+			dprint(f"out == {out}");
+			assert(out);
+			children.append(out);
 			break;
 	
 	return Block(label, instructions, children);

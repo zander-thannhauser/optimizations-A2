@@ -14,7 +14,7 @@ def dprint(string):
 	print(" " * depth + str(string));
 
 def enter(string):
-	dprint(string);
+	dprint(string + ":");
 	indent();
 
 def exit(string):

@@ -17,8 +17,8 @@ def PhiPhase_process(self, expression_table, **_):
 			exp = Phi(register, sources);
 		else:
 			exp = Global(register, *sources);
-		valnum = expression_table.exp_to_valnum(exp);
-		block.given_valnums[register] = valnum;
+		result = expression_table.extovn(exp);
+		block.given_valnums[register] = result.valnum;
 	
 	todo = [];
 	

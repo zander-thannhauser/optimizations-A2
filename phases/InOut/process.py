@@ -52,11 +52,11 @@ def InOutPhase_process(self, all_blocks, **_):
 		
 		for inst in block.instructions[-2::-1]:
 			dprint(inst);
-			if any(o in ins for o in inst.outs) or \
-					inst.operation in ["i2i", "iwrite", "store"]:
-				if inst.operation == "i2i":
-					outs.update(inst.outs);
-				ins.difference_update(inst.outs);
+			if (inst.out in ins) or \
+					inst.op in ["i2i", "iwrite", "store"]:
+				if inst.op == "i2i":
+					outs.add(inst.out);
+				ins.discard(inst.out);
 				ins.update(i for i in inst.ins if i.startswith("%vr"));
 			else:
 				inst.useless = True;

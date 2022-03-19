@@ -35,8 +35,8 @@ def setup_start_block(t):
 		assert(reg[:3] == "%vr");
 		args.append(reg);
 	
-	frame = Instruction(".frame", [name, framesize, *args], []);
-	start = Block("(.frame)", [frame], ["(fallthrough)"]);
+	# frame = Instruction(".frame", [name, framesize, *args], []);
+	start = Block("(.frame)", [], ["(fallthrough)"]);
 	
 	# start.params = ["%vr0", "%vr1", "%vr2", "%vr3"];
 	
@@ -142,7 +142,7 @@ def process_frame(t, p):
 		todo[0].dotout(**args);
 	
 	while len(todo):
-		print([str(p) for p in todo]);
+		# print([str(p) for p in todo]);
 		
 		phase = heappop(todo);
 		

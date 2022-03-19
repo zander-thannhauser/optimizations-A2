@@ -1,4 +1,4 @@
 
 def Block_eq(self, other):
-	return self.rpo == other.rpo;
+	return other is not None and self.rpo == other.rpo;
 

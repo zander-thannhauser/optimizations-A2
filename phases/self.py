@@ -5,6 +5,7 @@ class Phase:
 	IN_OUT = 2;
 	INHERITANCE = 3;
 	PHI = 4;
+	IMMEDIATE_DOMINATOR = 5;
 
 from .init import Phase_init;
 

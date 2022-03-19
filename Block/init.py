@@ -26,4 +26,6 @@ def Block_init(self, label, instructions, children_labels):
 	# phi phase:
 	self.given_valnums = {};
 	
+	# immedate dominator phase:
+	self.immedate_dominator = None;
 	

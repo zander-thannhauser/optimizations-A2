@@ -3,9 +3,6 @@ from debug import *;
 
 from .self import ImmediateDominatorPhase;
 
-from ExpressionTable.Phi.self import Phi;
-from ExpressionTable.Global.self import Global;
-
 def intersect(i, j):
 	finger1 = i
 	finger2 = j

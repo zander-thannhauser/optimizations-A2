@@ -16,6 +16,7 @@ from phases.InOut.self import InOutPhase;
 from phases.Inheritance.self import InheritancePhase;
 from phases.Phi.self import PhiPhase;
 from phases.ImmediateDominator.self import ImmediateDominatorPhase;
+from phases.Optimize.self import OptimizePhase;
 
 from ExpressionTable.self import ExpressionTable;
 
@@ -131,6 +132,7 @@ def process_frame(t, p):
 		InheritancePhase(start),
 		PhiPhase(start),
 		ImmediateDominatorPhase(start),
+		OptimizePhase(start),
 	];
 	
 	args = {

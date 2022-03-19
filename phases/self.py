@@ -6,6 +6,7 @@ class Phase:
 	INHERITANCE = 3;
 	PHI = 4;
 	IMMEDIATE_DOMINATOR = 5;
+	OPTIMIZE = 6;
 
 from .init import Phase_init;
 

@@ -23,11 +23,11 @@ digraph mygraph {
 		
 		attributes = b.attributes.copy();
 		
-		ins = " | ".join(f"<{r[1:]}> {r}" for r in b.ins);
+		ins = " | ".join(b.ins);
 		
 		label = attributes["label"];
 		
-		outs = " | ".join(f"<{r[1:]}> {r}" for r in b.outs);
+		outs = " | ".join(b.outs);
 		
 		attributes["label"] = "{ { " + ins + "} | " + label + " | { " + outs + " } }"
 		

@@ -1,6 +1,6 @@
 
 def Block_str(self):
-	return f"Block(rank = \"{self.rank}\")";
+	return f"Block(rpo = \"{self.rpo}\")";
 
 
 

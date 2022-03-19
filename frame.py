@@ -13,6 +13,8 @@ from block import read_block;
 
 from phases.Attribute.self import AttributePhase;
 from phases.InOut.self import InOutPhase;
+from phases.Inheritance.self import InheritancePhase;
+from phases.Phi.self import PhiPhase;
 
 from ExpressionTable.self import ExpressionTable;
 
@@ -125,8 +127,8 @@ def process_frame(t, p):
 	todo = [
 		AttributePhase(start),
 		InOutPhase(end),
-		# (2, start),
-		# (3, start),
+		InheritancePhase(start),
+		PhiPhase(start),
 	];
 	
 	args = {

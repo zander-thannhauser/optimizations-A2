@@ -4,6 +4,7 @@ class Phase:
 	ATTRIBUTES = 1;
 	IN_OUT = 2;
 	INHERITANCE = 3;
+	PHI = 4;
 
 from .init import Phase_init;
 

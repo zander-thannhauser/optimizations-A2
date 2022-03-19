@@ -4,14 +4,14 @@ from debug import *;
 from .self import AttributePhase;
 
 def AttributePhase_process(self, all_blocks, **_):
-	enter(f"AttributePhase.process(self.block.rank = {self.block.rank})");
+	enter(f"AttributePhase.process(self.block.rpo = {self.block.rpo})");
 	
 	todo = [];
 	
 	block = self.block;
-	hue = (block.rank - 1) / len(all_blocks);
+	hue = (block.rpo - 1) / len(all_blocks);
 	
-	block.attributes["label"] = f"rank = {block.rank}";
+	block.attributes["label"] = f"rpo = {block.rpo}, po = {block.po}";
 	block.attributes["style"] = "filled";
 	block.attributes["fillcolor"] = f"{hue} 1 1";
 	

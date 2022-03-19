@@ -2,7 +2,8 @@
 class Phase:
 	counter = 0;
 	ATTRIBUTES = 1;
-	INHERITANCE = 2;
+	IN_OUT = 2;
+	INHERITANCE = 3;
 
 from .init import Phase_init;
 

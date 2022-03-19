@@ -12,12 +12,7 @@ from Block.self import Block;
 from block import read_block;
 
 from phases.Attribute.self import AttributePhase;
-#from phases.Inheritance.self import InheritancePhase;
-#from phases.Phi.self import PhiPhase;
-
-#from dotouts.attributes import dotout_attributes;
-#from dotouts.inheritance import dotout_inheritance;
-#from dotouts.phi import dotout_phi;
+from phases.InOut.self import InOutPhase;
 
 from ExpressionTable.self import ExpressionTable;
 
@@ -40,7 +35,7 @@ def setup_start_block(t):
 	frame = Instruction(".frame", [name, framesize, *args], []);
 	start = Block("(.frame)", [frame], ["(fallthrough)"]);
 	
-	start.i2is = ["%vr0", "%vr1", "%vr2", "%vr3"];
+	# start.params = ["%vr0", "%vr1", "%vr2", "%vr3"];
 	
 	return start;
 
@@ -86,15 +81,25 @@ def resolve_references(all_blocks):
 			c.parents.append(b);
 		b.children = children;
 
-counter = 1;
+po_counter = 1;
+
+def postorder_rank(b):
+	global po_counter;
+	if b.po: return;
+	b.po = 1;
+	for c in b.children: postorder_rank(c);
+	b.po = po_counter;
+	po_counter += 1;
+
+rpo_counter = 1;
 
 def reverse_postorder_rank(b):
-	global counter;
-	if b.rank: return;
-	b.rank = 1;
+	global rpo_counter;
+	if b.rpo: return;
+	b.rpo = 1;
 	for c in b.parents: reverse_postorder_rank(c);
-	b.rank = counter;
-	counter += 1;
+	b.rpo = rpo_counter;
+	rpo_counter += 1;
 
 def print_asm(p):
 	assert(not "TODO");
@@ -111,12 +116,15 @@ def process_frame(t, p):
 	
 	resolve_references(all_blocks);
 	
+	postorder_rank(start);
+	
 	reverse_postorder_rank(end);
 	
 	et = ExpressionTable();
 	
 	todo = [
 		AttributePhase(start),
+		InOutPhase(end),
 		# (2, start),
 		# (3, start),
 	];
@@ -130,7 +138,7 @@ def process_frame(t, p):
 		todo[0].dotout(**args);
 	
 	while len(todo):
-		# print([str(p) for p in todo]);
+		print([str(p) for p in todo]);
 		
 		phase = heappop(todo);
 		
@@ -139,7 +147,8 @@ def process_frame(t, p):
 		phase.dotout(**args);
 		
 		for me in addmes:
-			heappush(todo, me);
+			if me not in todo:
+				heappush(todo, me);
 	
 	exit("process_frame");
 	

@@ -11,7 +11,7 @@ def unindent():
 
 def dprint(string):
 	global depth;
-	print(" " * depth + string);
+	print(" " * depth + str(string));
 
 def enter(string):
 	dprint(string);

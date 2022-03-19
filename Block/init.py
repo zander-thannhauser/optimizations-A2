@@ -9,11 +9,16 @@ def Block_init(self, label, instructions, children_labels):
 	# after reading assembly:
 	self.parents = [];
 	self.children = [];
-	self.rank = 0;
+	self.po = 0;
+	self.rpo = 0;
 	
 	# attribute phase:
 	self.attributes = {};
 	self.has_done = set();
+	
+	# in-out phase:
+	self.ins = set();
+	self.outs = set();
 	
 	# inheritance phase:
 	self.given = {};

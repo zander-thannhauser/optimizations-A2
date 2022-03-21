@@ -14,7 +14,11 @@ digraph mygraph {
 
 	node [shape=box];
 	
-	graph[bgcolor="#444444"];
+	graph [bgcolor=black];
+	
+	edge [color=white]
+	
+	node [fontcolor=black color=white];
 	
 	""", file = stream);
 	

@@ -5,7 +5,7 @@ from phases.self import Phase;
 
 from ExpressionTable.self import ExpressionTable;
 from ExpressionTable.Phi.self import Phi;
-from ExpressionTable.Global.self import Global;
+#from ExpressionTable.Global.self import Global;
 
 def OptimizePhase_dotout(self, all_blocks, expression_table, **_):
 	
@@ -28,12 +28,13 @@ digraph mygraph {
 	
 	valnums = set();
 	
+	all_instruction_ids = {};
+	
 	for block in all_blocks:
-#	for block in [all_blocks[1]]:
 		
 		bid = id(block);
 		
-		for valnum in block.given_valnums.values():
+		for valnum in block.incoming_phis.values():
 			if valnum not in valnums:
 				exp = expression_table.vntoex(valnum);
 				
@@ -45,16 +46,14 @@ digraph mygraph {
 				
 				valnums.add(valnum);
 		
+		inst_keys = [];
+		
 		if "optimized" in block.has_done:
-			inst_keys = [];
-			
 			for inst in block.instructions:
 				me = inst.dotout(stream);
+				
 				inst_keys.append(me);
 			
-			for index, key in enumerate(inst_keys):
-				if index:
-					print(f"\"{inst_keys[index-1]}\":s -> \"{key}\":n;", file = stream);
 		else:
 			for index, inst in enumerate(block.instructions):
 				ins = " | ".join(inst.ins);
@@ -66,11 +65,28 @@ digraph mygraph {
 				
 				label += "}}";
 				
-				print(f"\"{bid}_{index}\" [label=\"{label}\"];", file = stream);
+				me = f"{bid}_{index}"
 				
-				if index:
-					print(f"\"{bid}_{index-1}\" -> \"{bid}_{index}\";", file = stream);
+				print(f"\"{me}\" [label=\"{label}\"];", file = stream);
+				
+				inst_keys.append(me);
+				
+		all_instruction_ids[block.rpo] = inst_keys;
+	
+	for block in all_blocks:
 		
+		ids = all_instruction_ids[block.rpo];
+		
+		n = len(ids) - 1;
+		
+		for index, key in enumerate(ids):
+			if index < n:
+				print(f"\"{key}\":s -> \"{ids[index+1]}\":n;", file = stream);
+			else:
+				for child in block.children:
+					first_id = all_instruction_ids[child.rpo][0];
+					print(f"\"{key}\":s -> \"{first_id}\":n;", file = stream);
+			
 	print("""
 }
 	""", file = stream);

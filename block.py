@@ -17,6 +17,7 @@ def read_block(t):
 		t.next();
 	
 	instructions = [];
+	jump = None;
 	
 	children = ["(fallthrough)"]; # indicates we also want fallthrough
 	
@@ -27,46 +28,51 @@ def read_block(t):
 		# printf("operation == \"%s\"\n", operation);
 		t.next();
 		
-		if operation not in ["ret", "nop", "jumpI"]:
-			ins.append(t.token);
-			t.next();
-			while t.token == ',':
-				t.next();
-				ins.append(t.token);
-				t.next();
-		
-		if operation not in \
-				["ret", "nop", "iwrite", "fwrite", "swrite", "iread", "iret", "call"]:
-			# printf("t.token == \"%s\"\n", t.token);
-			assert(t.token in ["->", "=>"]);
-			t.next();
-			out = t.token;
-			t.next();
-		
-		if operation in ["store", "storeAI", "storeAO"]:
-			ins.append(out); out = None;
-		
-		if operation == "ret":
-			operation = "jumpI";
-			out = "(return)";
-		
-		# print(operation, ins, outs);
-		
-		instructions.append(Instruction(operation, ins, out));
-		
-		if operation == "jumpI":
-			assert(out);
-			children = [out];
-		elif operation == "jump":
-			assert(not "NOPE");
-		elif operation in ["cbr", "cbrne", \
-				"cbr_LT", "cbr_LE", "cbr_GT", "cbr_GE", "cbr_EQ", "cbr_NE"]:
-			dprint(f"out == {out}");
-			assert(out);
-			children.append(out);
-			break;
+#		if operation not in ["ret", "nop", "jumpI"]:
+#			ins.append(t.token);
+#			t.next();
+#			while t.token == ',':
+#				t.next();
+#				ins.append(t.token);
+#				t.next();
+#		
+#		if operation not in \
+#				["ret", "nop", "iwrite", "fwrite", "swrite", "iread", "iret", "call"]:
+#			# printf("t.token == \"%s\"\n", t.token);
+#			assert(t.token in ["->", "=>"]);
+#			t.next();
+#			out = t.token;
+#			t.next();
+#		
+#		if operation in ["store", "storeAI", "storeAO"]:
+#			ins.append(out); out = None;
+#		elif operation == "jumpI":
+#			assert(out);
+#			ins = [out];
+#			out = None;
+#		elif operation == "ret":
+#			operation = "jumpI";
+#			ins = ["(return)"];
+#		
+#		# print(operation, ins, outs);
+#		
+#		instructions.append(Instruction(operation, ins, out));
+#		
+#		if operation == "jumpI":
+#			children = ins.copy();
+#		elif operation == "jump":
+#			assert(not "NOPE");
+#		elif operation in ["cbr", "cbrne", \
+#				"cbr_LT", "cbr_LE", "cbr_GT", "cbr_GE", "cbr_EQ", "cbr_NE"]:
+#			dprint(f"out == {out}");
+#			assert(out);
+#			children.append(out);
+#			break;
+		assert(not "TODO");
 	
-	return Block(label, instructions, children);
+	assert(not "TODO");
+	
+	return Block(label, instructions, children, jump);
 
 
 

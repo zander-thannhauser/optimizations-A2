@@ -1,9 +1,10 @@
 
 from debug import *;
 
-from .common import load_literal;
+from .common import load_literal, consider;
 
 from ExpressionTable.Constant.self import Constant;
+from ExpressionTable.Expression.self import Expression;
 
 def optimize_mult(ops, et, ins, out):
 	enter(f"optimize_mult(ins = {ins}, out = {out})");
@@ -31,38 +32,39 @@ def optimize_mult(ops, et, ins, out):
 			assert(not "TODO");
 		
 #		# substitutions:
-#		# (addI X, a) * b => addI (multI X, b), (a * b)
-#		case (("addI", X, a), b) if type(b) is int:
-#			# check for using a move instruction's result
-#			if oldgvn(X):
-#				consider(ops, ("multI", lvn, b), out);
-#			else:
-#				subvn = consider(ops, ("multI", X, b));
-#				consider(ops, ("addI", subvn, a * b), out);
+		# (addI X, a) * b => addI (multI X, b), (a * b)
+		case (Expression(op = "addI", ins = [X, a]), Constant(value = b)):
+			if a * b:
+				subvn = consider(ops, et, "multI", (X, b));
+				consider(ops, et, "addI", (subvn, a * b), out);
+			else:
+				assert(not "TODO");
 
-#		# a * (addI X, b) => addI (multI X, a), (a * b)
-#		case (a, ("addI", X, b)) if type(a) is int:
-#			assert(not "TODO");
+		# a * (addI X, b) => addI (multI X, a), (a * b)
+		case (Constant(value = a), Expression(op = "addI", ins = [X, b])):
+			assert(not "TODO");
 
-#		# (multI X, a) * b => multI X, (a * b)
-#		case (("multI", X, a), b) if type(b) is int:
-#			assert(not "TODO");
+		# (multI X, a) * b => multI X, (a * b)
+		case (Expression(op = "multI", ins = [X, a]), Constant(value = b)):
+			consider(ops, et, "multI", (X, a * b), out);
+		
+		# a * (multI X, b) => multI X, (a * b)
+		case (Constant(value = a), Expression(op = "multI", ins = [X, b])):
+			assert(not "TODO");
 
-#		# a * (multI X, b) => multI X, (a * b)
-#		case (a, ("multI", X, b)) if type(a) is int:
-#			assert(not "TODO");
+		# (multI X, a) * (multI Y, b) => multI (mult X Y), (a * b)
+		case (Expression(op = "multI", ins = [X, a]), \
+				Expression(op = "multI", ins = [Y, b])):
+			assert(not "TODO");
 
-#		# (multI X, a) * (multI Y, b) => multI (mult X Y), (a * b)
-#		case (("multI", X, a), ("multI", Y, b)):
-#			assert(not "TODO");
+		# mult X, c => multI X, c:
+		case (_, Constant(value = c)):
+			consider(ops, et, "multI", (lvn, c), out);
 
-#		# mult X, c => multI X, c:
-#		case (_, c) if type(c) is int:
-#			consider(ops, ("multI", lvn, c), out);
-
-#		# mult c, X => multI X, c:
-#		case (c, _) if type(c) is int:
-#			consider(ops, ("multI", rvn, c), out);
+		# mult c, X => multI X, c:
+		case (Constant(value = c), _):
+			# consider(ops, ("multI", rvn, c), out);
+			assert(not "TODO");
 
 #		# default:
 		case (lex, rex):
@@ -72,6 +74,20 @@ def optimize_mult(ops, et, ins, out):
 	
 	
 	exit("return;");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

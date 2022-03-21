@@ -63,15 +63,54 @@ def optimize_comp(ops, et, ins, out):
 			assert(not "TODO");
 		
 		# (multI X, a) vs b => X vs b // a
-		case (Expression(op = "multI", ins = [X, a]), Constant(value = b)) \
-			  if b % a == 0:
-			assert(not "TODO");
+		case (Expression(op = "multI", ins = [X, a]), Constant(value = b)):
+			if b % a == 0:
+				assert(not "TODO");
+			else:
+				assert(not "TODO");
 		
 		# (multI X, a) vs (multI Y, b) => (multI X, (a // b)) vs Y
 		case (Expression(op = "multI", ins = [X, a]), \
 			  Expression(op = "multI", ins = [Y, b])) \
 			  if a % b == 0 or b % a == 0:
 			# or whichever's lower
+			assert(not "TODO");
+		
+		case (Expression(op = "mult", ins = [A, B]), Expression(op = "mult", ins = [C, D])) if A == C:
+			assert(not "TODO");
+		
+		case (Expression(op = "mult", ins = [A, B]), Expression(op = "mult", ins = [C, D])) if B == D:
+			assert(not "TODO");
+		
+		case (Expression(op = "multI", ins = [X, a]), Constant(value = b)):
+			assert(not "TODO");
+		
+		case (Constant(value = b), Expression(op = "multI", ins = [X, a])):
+			assert(not "TODO");
+		
+		case (Expression(op = "sub", ins = [X, Y]), Constant(value = c)):
+			# if Y is an addI, then you can bring it across
+			assert(not "TODO");
+		
+		case (Expression(op = "sub", ins = [X, Y]), Constant(value = 0)):
+			assert(not "TODO");
+		
+		case (Constant(value = 0), Expression(op = "sub", ins = [X, a])):
+			assert(not "TODO");
+		
+		case (Expression(op = "sub", ins = [A, B]), Expression(op = "sub", ins = [C, D])) if B == D:
+			assert(not "TODO");
+		
+		case (Expression(op = "add", ins = [A, B]), Expression(op = "add", ins = [C, D])) if A == C:
+			assert(not "TODO");
+		
+		case (Expression(op = "add", ins = [A, B]), Expression(op = "add", ins = [C, D])) if B == D:
+			assert(not "TODO");
+		
+		case (Expression(op = "addI", ins = [X, a]), Constant(value = b)):
+			assert(not "TODO");
+		
+		case (Constant(value = b), Expression(op = "addI", ins = [X, a])):
 			assert(not "TODO");
 		
 		# default:

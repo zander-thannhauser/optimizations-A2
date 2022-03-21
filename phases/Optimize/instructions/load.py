@@ -19,23 +19,7 @@ def optimize_load(ops, et, ins, out):
 		
 		# load (add  X, Y) => Z === loadAO X, Y => Z
 		case Expression(op = "add", ins = [X, Y]):
-			assert(not "CHECK");
-		
-		# load (sub X, ("multI", Y, c)) => Z === loadAO X, (multI, Y -c) => Z
-		case Expression(op = "sub", ins = [X, Y]):
-#			# check for using a move instruction's result
-#			if oldgvn(X):
-#				assert(not "TODO");
-#			else:
-#				subex = vntoex(Y);
-#				if subex[0] == "multI":
-#					subvn = consider(ops, ("multI", subex[1], -subex[2]));
-#					ops.append(("loadAO", [X, subvn], "=>", [ovn]));
-#				elif subex[0] == "sub":
-#					assert(not "TODO");
-#				else:
-#					assert(not "TODO");
-			assert(not "TODO");
+			ops.append(Instruction("loadAO", [X, Y], ovn));
 		
 		case iex:
 			dprint(f"iex = {iex}");

@@ -29,8 +29,7 @@ def optimize_cbr(ops, et, ins, out):
 			assert(not "TODO");
 		
 		case Expression(op = "cmp_GT", ins = [X, Y]):
-			# ops.append(("cbr_GT", [X, Y], "->", outs));
-			assert(not "TODO");
+			ops.append(Instruction("cbr_GT", [X, Y], out));
 		
 		case Expression(op = "cmp_GE", ins = [X, Y]):
 			# ops.append(("cbr_GE", [X, Y], "->", outs));
@@ -67,9 +66,7 @@ def optimize_cbr(ops, et, ins, out):
 		
 		# default:
 		case (iex):
-			dprint(f"iex = {iex}");
-			# ops.append(("cbr", [vn], "->", outs));
-			assert(not "TODO");
+			ops.append(Instruction("cbr", [ivn], out));
 	
 
 	exit("return;");

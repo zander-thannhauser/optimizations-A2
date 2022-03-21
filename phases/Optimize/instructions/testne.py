@@ -3,13 +3,13 @@ from debug import *;
 
 from .common import load_literal, consider;
 
-from ._not import optimize_not_vr;
-
 from ExpressionTable.Constant.self import Constant;
 from ExpressionTable.Expression.self import Expression;
 
-def optimize_testeq_vr(ops, et, ivn, out):
-	enter(f"optimize_testeq_vr(ivn = {ivn}, out = {out})");
+def optimize_testne(ops, et, ins, out):
+	enter(f"optimize_testne(ins = {ins}, out = {out})");
+	
+	ivn = et.vrtovn(ins[0]);
 	
 	match (et.vntoex(ivn)):
 		# constant-fold:
@@ -24,28 +24,15 @@ def optimize_testeq_vr(ops, et, ivn, out):
 				case (Constant(value = 0), _):
 					assert(not "TODO");
 				case (_, Constant(value = 0)):
-					retval = optimize_not_vr(ops, et, X, out);
+					et.avrwvn(out, X);
 				case _:
-					# consider(ops, ("cmp_EQ", X, Y), out);
-					assert(not "TODO");
+					consider(ops, et, "cmp_EQ", (X, Y), out);
 					
 		# default:
 		case (iex):
 			assert(not "TODO");
 	
-	exit(f"return {retval};");
-	return retval;
-
-
-def optimize_testeq(ops, et, ins, out):
-	enter(f"optimize_testeq(ins = {ins}, out = {out})");
-	
-	ivn = et.vrtovn(ins[0]);
-	
-	optimize_testeq_vr(ops, et, ivn, out);
-	
 	exit("return;");
-
 
 
 

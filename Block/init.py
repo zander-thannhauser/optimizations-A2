@@ -1,9 +1,10 @@
 
-def Block_init(self, label, instructions, children_labels):
+def Block_init(self, label, instructions, children_labels, jump = None):
 	
 	# used during reading assembly:
 	self.label = label;
 	self.instructions = instructions;
+	self.jump = jump;
 	self.children_labels = children_labels;
 	
 	# after reading assembly:
@@ -24,7 +25,8 @@ def Block_init(self, label, instructions, children_labels):
 	self.given = {};
 	
 	# phi phase:
-	self.given_valnums = {};
+	self.incoming_phis = {}; # register -> phi valnum
+	self.outgoing_phis = set(); # phi valnums
 	
 	# immedate dominator phase:
 	self.immedate_dominator = None;

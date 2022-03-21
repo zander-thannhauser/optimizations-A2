@@ -3,8 +3,9 @@ from debug import *;
 
 from phases.self import Phase;
 
+from ExpressionTable.self import ExpressionTable;
 from ExpressionTable.Phi.self import Phi;
-from ExpressionTable.Global.self import Global;
+#from ExpressionTable.Global.self import Global;
 
 def PhiPhase_dotout(self, all_blocks, expression_table, **_):
 	
@@ -17,7 +18,11 @@ digraph mygraph {
 
 	node [shape=record];
 	
-	graph[bgcolor="#444444"];
+	graph [bgcolor=black];
+	
+	edge [color=white]
+	
+	node [fontcolor=black color=white];
 	
 	""", file = stream);
 	
@@ -41,11 +46,12 @@ digraph mygraph {
 		for c in b.children:
 			print(f"\"{id(b)}\":s -> \"{id(c)}\":n [style=bold]", file = stream);
 		
-		if (b.given_valnums):
-			for r, valnum in b.given_valnums.items():
+		if (b.incoming_phis):
+			for r, valnum in b.incoming_phis.items():
+				hue = valnum / ExpressionTable.valcounter;
 				if valnum not in valnums:
 					exp = expression_table.vntoex(valnum);
-					style = "shape=circle style=filled color=white"
+					style = f"shape=circle style=filled color=\"{hue} 1 1\""
 					if type(exp) is Phi:
 						print(f"""
 							\"{valnum}\" [label="𝜙" {style}];
@@ -72,7 +78,7 @@ digraph mygraph {
 					valnums.add(valnum);
 				print(f"""
 					\"{valnum}\" -> \"{id(b)}\":\"in_{r[1:]}\":n
-					 [style=dashed color=white]
+					 [style=dashed color=\"{hue} 1 1\"];
 				""", file = stream);
 		else:
 			for r, ps in b.given.items():

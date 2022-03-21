@@ -126,7 +126,8 @@ def reverse_postorder_rank(b):
 	rpo_counter += 1;
 
 def print_asm(block, p):
-	# for inst in block.instructions:
+	enter(f"print_asm(block.rpo = {block.rpo})");
+	
 	p.comment("block.rpo = %i:", block.rpo);
 	
 	if block.label and len(block.parents) > 1:
@@ -137,13 +138,22 @@ def print_asm(block, p):
 	
 	if block.jump is not None:
 		block.jump.print(p);
-	elif block.children_labels[0] == "(return)":
-		p.print("ret");
 	
-	for child in block.children:
-		if "printed-assembly" not in child.has_done:
+	dprint(f"block.children = {[str(b) for b in block.children]}");
+	
+	for i, child in enumerate(block.children):
+		dprint(f"child = {child}");
+		if len(child.instructions) == 0:
+			assert(child.jump is not None);
+			child.jump.print(p);
+		elif "printed-assembly" not in child.has_done:
 			child.has_done.add("printed-assembly");
 			print_asm(child, p);
+		elif i == 0:
+			assert(not "my fallthrough-child has already been printed"
+				"insert jumpI instruction to the child");
+	
+	exit("return;");
 
 def process_frame(t, p):
 	

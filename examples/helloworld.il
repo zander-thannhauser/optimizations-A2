@@ -4,7 +4,7 @@
 .string .string_const_0, "Hello world!"
 
 .text
-.frame main, 0
+.frame main, 42
 	loadI .string_const_0 => %vr4
 	swrite %vr4
 	ret

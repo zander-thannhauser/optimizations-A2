@@ -26,7 +26,7 @@ def optimize_testne(ops, et, ins, out, label):
 				case (_, Constant(value = 0)):
 					et.avrwvn(out, X);
 				case _:
-					consider(ops, et, "cmp_EQ", (X, Y), out);
+					consider(ops, et, "cmp_NE", (X, Y), out);
 					
 		# default:
 		case (iex):

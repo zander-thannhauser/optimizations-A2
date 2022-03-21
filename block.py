@@ -29,7 +29,7 @@ def read_block(t):
 		match (operation):
 			
 			# those who take one in and zero out:
-			case "iwrite":
+			case "iwrite" | "swrite":
 				ins.append(t.token); t.next();
 				instructions.append(Instruction(operation, ins, out));
 			

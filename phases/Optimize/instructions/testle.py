@@ -19,7 +19,7 @@ def optimize_testle(ops, et, ins, out, label):
 		
 		# substitutions:
 		case Expression(op = "comp", ins = [X, Y]):
-			consider(ops, et, "cmp_GT", (X, Y), out);
+			consider(ops, et, "cmp_LE", (X, Y), out);
 		
 		# default:
 		case (iex):

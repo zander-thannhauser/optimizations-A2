@@ -38,11 +38,7 @@ def optimize_cbrne(ops, et, ins, out, label):
 		
 		case Expression(op = "cmp_NE", ins = [X, Y]):
 			# check for using a move instruction's result
-#			if oldgvn(X) or oldgvn(Y):
-#				assert(not "TODO");
-#			else:
-#				ops.append(("cbr_EQ", [X, Y], "->", [out]));
-			assert(not "TODO");
+			ops.append(Instruction("cbr_EQ", [X, Y], out, label));
 		
 		case Expression(op = "testeq", ins = [X]): assert(not "TODO");
 		case Expression(op = "testne", ins = [X]): assert(not "TODO");

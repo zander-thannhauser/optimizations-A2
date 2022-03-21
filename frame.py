@@ -24,7 +24,7 @@ from ExpressionTable.self import ExpressionTable;
 
 from debug import *;
 
-def setup_start_block(t):
+def setup_start_block(t, p, et):
 	assert(t.token == ".frame");
 	
 	name = next(t);
@@ -38,10 +38,14 @@ def setup_start_block(t):
 		assert(reg[:3] == "%vr");
 		args.append(reg);
 	
+	p.printf(".frame %s, %s", name, framesize, prefix = "");
+	
 	# frame = Instruction(".frame", [name, framesize, *args], []);
 	start = Block("(.frame)", [], ["(fallthrough)"]);
 	
-	# start.params = ["%vr0", "%vr1", "%vr2", "%vr3"];
+	for register in ["%vr0", "%vr1", "%vr2", "%vr3"]:
+		valnum = et.mkvn();
+		et.avrwvn(register, valnum);
 	
 	return start;
 
@@ -145,7 +149,9 @@ def process_frame(t, p):
 	
 	enter("process_frame");
 	
-	start = setup_start_block(t);
+	et = ExpressionTable();
+	
+	start = setup_start_block(t, p, et);
 	
 	end = setup_end_block();
 	
@@ -156,8 +162,6 @@ def process_frame(t, p):
 	postorder_rank(start);
 	
 	reverse_postorder_rank(end);
-	
-	et = ExpressionTable();
 	
 	todo = [
 		## LostParentBlock()            # top-down

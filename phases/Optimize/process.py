@@ -22,6 +22,7 @@ from .instructions.testle import optimize_testle;
 from .instructions.iwrite import optimize_iwrite;
 from .instructions.jumpI  import optimize_jumpI;
 from .instructions.ret    import optimize_ret;
+from .instructions.swrite import optimize_swrite;
 
 from Instruction.self import Instruction;
 from ExpressionTable.Phi.self import Phi;
@@ -46,6 +47,7 @@ lookup = {
 	"iwrite": optimize_iwrite,
 	"jumpI":  optimize_jumpI,
 	"ret":    optimize_ret,
+	"swrite": optimize_swrite,
 };
 
 def OptimizePhase_process(self, all_blocks, expression_table, **_):
@@ -55,10 +57,6 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 	
 	if block == all_blocks[0]:
 		block.expression_table = expression_table.copy();
-		
-		for register in ["%vr0", "%vr1", "%vr2", "%vr3"]:
-			valnum = expression_table.mkvn();
-			block.expression_table.avrwvn(register, valnum);
 		
 	else:
 		
@@ -123,6 +121,7 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				
 				case ("cbr", "cbr_GT"): pass;
 				case ("cbr", "cbr_NE"): pass;
+				case ("cbr", "cbr_LE"): pass;
 				
 				case ("cbr", "cbrne"): pass;
 				
@@ -130,6 +129,7 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				case ("cbrne", "cbr_GE"): pass;
 				case ("cbrne", "cbr_GT"): pass;
 				case ("cbrne", "cbr_NE"): pass;
+				case ("cbrne", "cbr_EQ"): pass;
 				
 				# if a conditional-branch becomes nonconditional:
 				# remove the jump instruction, have this block consider

@@ -16,9 +16,10 @@ def SuperficalCruciality_process(self, **_):
 		match inst.op:
 			case "loadI" | "addI" | "add" \
 					| "loadAI" | "comp" | "not" | "i2i" \
-					| "multI" | "cmp_GT" | "cmp_EQ" | "cmp_LT" | "loadAO":
+					| "multI"  | "loadAO" \
+					| "cmp_GT" | "cmp_EQ" | "cmp_LT" | "cmp_NE" | "cmp_LE":
 				pass;
-			case "storeAI" | "iwrite":
+			case "storeAI" | "iwrite" | "swrite":
 				todo.append(InstructionCruciality(inst, block));
 			case _:
 				dprint(f"inst.op = {inst.op}");

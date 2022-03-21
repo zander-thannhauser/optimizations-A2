@@ -53,13 +53,14 @@ def InstructionCruciality_process(self, **_):
 		match inst.op:
 			case "loadI":
 				pass;
-			case "iwrite" | "cbrne" | "cbr" | "i2i":
+			case "iwrite" | "swrite" | "cbrne" | "cbr" | "i2i":
 				src, = inst.ins;
 				submit(src);
 			case "multI" | "addI" | "loadAI":
 				inner, const = inst.ins;
 				submit(inner);
-			case "cbr_GT" | "cbr_GE" | "cbr_NE" | "loadAO" | "add":
+			case "cbr_GT" | "cbr_GE" | "cbr_NE" | "cbr_EQ" | "cbr_LE" \
+					| "loadAO" | "add":
 				left, right = inst.ins;
 				submit(left);
 				submit(right);

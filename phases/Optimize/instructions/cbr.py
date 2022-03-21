@@ -25,8 +25,7 @@ def optimize_cbr(ops, et, ins, out, label):
 			assert(not "TODO");
 		
 		case Expression(op = "cmp_LE", ins = [X, Y]):
-			# ops.append(("cbr_LE", [X, Y], "->", outs));
-			assert(not "TODO");
+			ops.append(Instruction("cbr_LE", [X, Y], out, label));
 		
 		case Expression(op = "cmp_GT", ins = [X, Y]):
 			ops.append(Instruction("cbr_GT", [X, Y], out, label));

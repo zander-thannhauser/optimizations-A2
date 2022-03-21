@@ -58,15 +58,22 @@ def InOutPhase_process(self, all_blocks, **_):
 			dprint(f"inst = {inst}");
 			# dprint(f"inst.out = {inst.out}");
 			
-			if (inst.out in ins) or inst.op in ["i2i", "iwrite", "store", "ret"]:
+			if (inst.out in ins) or inst.op in \
+					["i2i", "iwrite", "store", "ret", "swrite"]:
 				# either it's useful or protected:
 				if inst.op == "i2i":
 					outs.add(inst.out);
 				ins.discard(inst.out);
-				ins.update(i for i in inst.ins if i.startswith("%vr"));
+				if inst.op != "loadI":
+					print(f"inst.ins = {inst.ins}");
+					ins.update(inst.ins);
+					# ins.update(i for i in inst.ins if i.startswith("%vr"));
+					# assert(not "CHECK");
 				new_instructions.insert(0, inst);
-			else:
+			elif inst.op in ["loadI"]:
 				dprint("USELESS!");
+			else:
+				assert(not "TODO");
 		
 		block.instructions = new_instructions;
 	

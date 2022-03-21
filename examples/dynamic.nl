@@ -84,3 +84,16 @@ BEGIN
 	WRITE(cost[m*size+n])
       
 END
+
+
+
+
+
+
+
+
+
+
+
+
+

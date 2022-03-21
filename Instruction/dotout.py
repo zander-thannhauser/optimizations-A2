@@ -41,19 +41,8 @@ def Instruction_dotout(self, stream):
 			connect_param(inner, f"1", stream);
 			ins = f"<1> {inner}";
 		
-		case "cbr_GT":
-			left, right = self.ins;
-			connect_param(left, f"1", stream);
-			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
-		
-		case "cbr_NE":
-			left, right = self.ins;
-			connect_param(left, f"1", stream);
-			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
-		
-		case "cbr_GE":
+		case "cbr_GT" | "cbr_NE" | "cbr_GE" | "cbr_EQ" | "cbr_LE" \
+				| "cmp_GT" | "cmp_LT" | "cmp_EQ" | "cmp_NE" | "cmp_LE":
 			left, right = self.ins;
 			connect_param(left, f"1", stream);
 			connect_param(right, f"2", stream);
@@ -63,24 +52,6 @@ def Instruction_dotout(self, stream):
 			inner,  = self.ins;
 			connect_param(inner, f"1", stream);
 			ins = f"<1> {inner}";
-		
-		case "cmp_GT":
-			left, right = self.ins;
-			connect_param(left, f"1", stream);
-			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
-		
-		case "cmp_LT":
-			left, right = self.ins;
-			connect_param(left, f"1", stream);
-			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
-		
-		case "cmp_EQ":
-			left, right = self.ins;
-			connect_param(left, f"1", stream);
-			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
 		
 		case "comp":
 			left, right = self.ins;
@@ -121,7 +92,13 @@ def Instruction_dotout(self, stream):
 		
 		case "loadI":
 			literal,  = self.ins;
-			ins = f"<1> {literal.value}"
+			match literal:
+				case Constant():
+					ins = f"<1> {literal.value}"
+				case str():
+					ins = f"<1> \"{literal}\""
+				case _:
+					assert(not "TODO");
 		
 		case "ret":
 			ins = ""
@@ -150,6 +127,11 @@ def Instruction_dotout(self, stream):
 			connect_param(left, f"1", stream);
 			connect_param(right, f"2", stream);
 			ins = f"<1> {left} | <2> {right}";
+		
+		case "swrite":
+			inner,  = self.ins;
+			connect_param(inner, f"1", stream);
+			ins = f"<1> {inner}";
 		
 		case _:
 			dprint(f"self.op == {self.op}");

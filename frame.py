@@ -17,6 +17,8 @@ from phases.Inheritance.self import InheritancePhase;
 from phases.Phi.self import PhiPhase;
 from phases.ImmediateDominator.self import ImmediateDominatorPhase;
 from phases.Optimize.self import OptimizePhase;
+from phases.SuperficalCruciality.self import SuperficalCruciality;
+from phases.DeadCodeRemoval.self import DeadCodeRemoval;
 
 from ExpressionTable.self import ExpressionTable;
 
@@ -51,28 +53,33 @@ def setup_end_block():
 def read_all_blocks(t, start, exit):
 	all_blocks = [];
 	
+	all_blocks.append(start);
+	
 	while t.token and t.token != ".frame":
 		b = read_block(t);
 		all_blocks.append(b);
 	
-	first = all_blocks[0];
-	start.children.append(first);
-	first.parents.append(start);
-	
-	all_blocks.insert(0, start);
 	all_blocks.append(exit);
 	
 	return all_blocks;
 
 def resolve_references(all_blocks):
+	enter("resolve_references()");
+	
 	blocks_by_name = {};
 	
 	for b in all_blocks:
 		if b.label:
 			blocks_by_name[b.label] = b;
 	
+	dprint(f"len(all_blocks[0].children) = {len(all_blocks[0].children)}");
+	dprint(f"len(all_blocks[0].children_labels) = {len(all_blocks[0].children_labels)}");
+	dprint(f"len(all_blocks[1].parents)  = {len(all_blocks[1].parents)}");
+	
 	for i, b in enumerate(all_blocks):
 		children = [];
+		dprint(f"i = {i}");
+		dprint(f"b.children_labels = {b.children_labels}");
 		for c in b.children_labels:
 			if c == "(fallthrough)":
 				children.append(all_blocks[i + 1]);
@@ -80,10 +87,19 @@ def resolve_references(all_blocks):
 				children.append(blocks_by_name[c]);
 			else:
 				fprintf(stderr, "%s: unresolved reference to '%s'!\n", argv[0], c);
-				exit(1);
+				sys.exit(1);
 		for c in children:
 			c.parents.append(b);
 		b.children = children;
+	
+	dprint(f"len(all_blocks[0].children) = {len(all_blocks[0].children)}");
+	dprint(f"len(all_blocks[0].children_labels) = {len(all_blocks[0].children_labels)}");
+	dprint(f"len(all_blocks[1].parents)  = {len(all_blocks[1].parents)}");
+	
+	# assert(not "CHECK");
+	
+	exit("return;");
+
 
 po_counter = 1;
 
@@ -127,12 +143,17 @@ def process_frame(t, p):
 	et = ExpressionTable();
 	
 	todo = [
-		AttributePhase(start),
-		InOutPhase(end),
-		InheritancePhase(start),
-		PhiPhase(start),
-		ImmediateDominatorPhase(start),
-		OptimizePhase(start),
+		## LostParentBlock()            # top-down
+		AttributePhase(start),          # top-down
+		InOutPhase(end),                # bottom-up
+		InheritancePhase(start),        # top-down
+		PhiPhase(start),                # top-down
+		ImmediateDominatorPhase(start), # top-down
+		OptimizePhase(start),           # top-down
+		SuperficalCruciality(start),    # top-down
+		## BlockCruciality(),           # bottom-up
+		## InstructionCruciality(),     # bottom-up
+		DeadCodeRemoval(start),         # top-down
 	];
 	
 	args = {

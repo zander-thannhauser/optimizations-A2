@@ -67,9 +67,9 @@ def read_block(t):
 			case "cbr" | "cbrne":
 				ins.append(t.token); t.next();
 				assert(t.token == "->"); t.next();
-				out = t.token; t.next();
-				jump = Instruction(operation, ins, out);
-				children.append(out);
+				branch_label = t.token; t.next();
+				jump = Instruction(operation, ins, out, branch_label);
+				children.append(branch_label);
 				break;
 			
 			case "ret":

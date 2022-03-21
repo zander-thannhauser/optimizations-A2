@@ -13,6 +13,7 @@ def consider(ops, et, op, ins, out = None):
 	
 	if result.is_new:
 		inst = Instruction(op, ins, result.valnum);
+		# exp.instruction = inst;
 		ops.append(inst);
 	
 	if out is not None:

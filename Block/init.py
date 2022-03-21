@@ -31,3 +31,21 @@ def Block_init(self, label, instructions, children_labels, jump = None):
 	# immedate dominator phase:
 	self.immedate_dominator = None;
 	
+	# optimization phase:
+	self.valnum_to_instruction = {};
+	
+	# cruciality/dead-code phases:
+	self.is_critical = False;
+
+
+
+
+
+
+
+
+
+
+
+
+

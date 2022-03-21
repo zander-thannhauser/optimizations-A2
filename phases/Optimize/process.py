@@ -95,7 +95,11 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 	#		# can't put the i2i's at the *very* end, you want one before the jump
 	#		# instruction.
 	#		# assert(not "TODO");
-
+		
+		for instruction in new_instructions:
+			if type(instruction.out) is int:
+				block.valnum_to_instruction[instruction.out] = instruction;
+		
 		if block.jump is not None:
 			before = block.jump;
 			
@@ -124,6 +128,11 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				case ("cbrne", "cbr_GE"): pass;
 				case ("cbrne", "cbr_GT"): pass;
 				case ("cbrne", "cbr_NE"): pass;
+				
+				# if a conditional-branch becomes nonconditional:
+				# remove the jump instruction, have this block consider
+				# it's one parent as it's fallthrough.
+					# and push old paperwork phases.
 				
 				case _:
 					assert(not "TODO");

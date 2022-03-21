@@ -7,9 +7,9 @@ from ExpressionTable.Constant.self import Constant;
 def Instruction_dotout(self, stream):
 	enter("Instruction.dotout()");
 	
-	dprint(f"self.op = {self.op}");
-	dprint(f"self.ins = {self.ins}");
-	dprint(f"self.out = {self.out}");
+#	dprint(f"self.op = {self.op}");
+#	dprint(f"self.ins = {self.ins}");
+#	dprint(f"self.out = {self.out}");
 	
 	if type(self.out) is int:
 		me = self.out;
@@ -158,11 +158,20 @@ def Instruction_dotout(self, stream):
 	label = "{{" + self.op + " | " + ins + "}}";
 	
 	print(f"""
-		"{me}" [shape=record label="{label}" color="{color}"];
+		"{me}" [shape=record label="{label}" color="{color}"]
+		[{"style=filled fontcolor=black" if self.is_critical else ""}];
 	""", file = stream);
 	
 	exit(f"return {me};");
 	return me;
+
+
+
+
+
+
+
+
 
 
 

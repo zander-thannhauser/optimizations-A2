@@ -45,7 +45,7 @@ def setup_start_block(t):
 
 def setup_end_block():
 	ret = Instruction("ret", [], []);
-	end = Block("(return)", [ret], []);
+	end = Block("(return)", [], [], ret);
 	return end;
 
 def read_all_blocks(t, start, exit):

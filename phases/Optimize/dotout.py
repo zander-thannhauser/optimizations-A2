@@ -48,14 +48,18 @@ digraph mygraph {
 		
 		inst_keys = [];
 		
+		instructions = block.instructions.copy();
+		
+		if block.jump:
+			instructions.append(block.jump);
+		
 		if "optimized" in block.has_done:
-			for inst in block.instructions:
+			for inst in instructions:
 				me = inst.dotout(stream);
 				
 				inst_keys.append(me);
-			
 		else:
-			for index, inst in enumerate(block.instructions):
+			for index, inst in enumerate(instructions):
 				ins = " | ".join(inst.ins);
 				
 				label = "{{" + inst.op + " | " + ins
@@ -70,7 +74,7 @@ digraph mygraph {
 				print(f"\"{me}\" [label=\"{label}\"];", file = stream);
 				
 				inst_keys.append(me);
-				
+			
 		all_instruction_ids[block.rpo] = inst_keys;
 	
 	for block in all_blocks:

@@ -18,60 +18,68 @@ def read_block(t):
 	
 	instructions = [];
 	jump = None;
-	
 	children = ["(fallthrough)"]; # indicates we also want fallthrough
 	
 	while t.token and (t.token[0] != '.'):
-		ins = []
-		out = None
-		operation = t.token;
-		# printf("operation == \"%s\"\n", operation);
+		operation = t.token; ins = []; out = None;
+		
+		printf("operation == \"%s\"\n", operation);
 		t.next();
 		
-#		if operation not in ["ret", "nop", "jumpI"]:
-#			ins.append(t.token);
-#			t.next();
-#			while t.token == ',':
-#				t.next();
-#				ins.append(t.token);
-#				t.next();
-#		
-#		if operation not in \
-#				["ret", "nop", "iwrite", "fwrite", "swrite", "iread", "iret", "call"]:
-#			# printf("t.token == \"%s\"\n", t.token);
-#			assert(t.token in ["->", "=>"]);
-#			t.next();
-#			out = t.token;
-#			t.next();
-#		
-#		if operation in ["store", "storeAI", "storeAO"]:
-#			ins.append(out); out = None;
-#		elif operation == "jumpI":
-#			assert(out);
-#			ins = [out];
-#			out = None;
-#		elif operation == "ret":
-#			operation = "jumpI";
-#			ins = ["(return)"];
-#		
-#		# print(operation, ins, outs);
-#		
-#		instructions.append(Instruction(operation, ins, out));
-#		
-#		if operation == "jumpI":
-#			children = ins.copy();
-#		elif operation == "jump":
-#			assert(not "NOPE");
-#		elif operation in ["cbr", "cbrne", \
-#				"cbr_LT", "cbr_LE", "cbr_GT", "cbr_GE", "cbr_EQ", "cbr_NE"]:
-#			dprint(f"out == {out}");
-#			assert(out);
-#			children.append(out);
-#			break;
-		assert(not "TODO");
-	
-	assert(not "TODO");
-	
+		match (operation):
+			
+			# those who take one in and zero out:
+			case "iwrite":
+				ins.append(t.token); t.next();
+				instructions.append(Instruction(operation, ins, out));
+			
+			# those who take one in and one out:
+			case "loadI" | "i2i" | "load" \
+					| "testeq" | "testne" \
+					| "testgt" \
+					| "testne" \
+					| "testlt" | "testle" :
+				ins.append(t.token); t.next();
+				assert(t.token == "=>"); t.next();
+				out = t.token; t.next();
+				instructions.append(Instruction(operation, ins, out));
+			
+			# those who take two in and one out:
+			case "add" | "sub" | "mult" | "comp":
+				ins.append(t.token); t.next();
+				assert(t.token == ","); t.next();
+				ins.append(t.token); t.next();
+				assert(t.token == "=>"); t.next();
+				out = t.token; t.next();
+				instructions.append(Instruction(operation, ins, out));
+			
+			# store:
+			case "store":
+				ins.append(t.token); t.next();
+				assert(t.token == "=>"); t.next();
+				ins.append(t.token); t.next();
+				instructions.append(Instruction(operation, ins, out));
+			
+			# nop:
+			case "nop": pass;
+			
+			# branching:
+			case "cbr" | "cbrne":
+				ins.append(t.token); t.next();
+				assert(t.token == "->"); t.next();
+				out = t.token; t.next();
+				jump = Instruction(operation, ins, out);
+				children.append(out);
+				break;
+			
+			case "ret":
+				# jump = Instruction("jumpI", ["(return)"], out);
+				children = ["(return)"];
+				break;
+			
+			case _:
+				assert(not "TODO");
+		
 	return Block(label, instructions, children, jump);
 
 

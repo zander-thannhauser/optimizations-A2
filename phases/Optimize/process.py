@@ -60,10 +60,8 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 			valnum = expression_table.mkvn();
 			block.expression_table.avrwvn(register, valnum);
 		
-		# this is also where block labels are introduced, using loadIs.
-		# assert(not "TODO");
-		
 	else:
+		
 		block.expression_table = block.immedate_dominator.expression_table.copy();
 		
 		# incoming_phis is only filled with Phi's.
@@ -81,47 +79,56 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				ins = instruction.ins, \
 				out = instruction.out)
 		
-		jump = new_instructions.pop();
-		
-		# ask expression_table for the value number behind each of the
+		# ask expression table for the value number behind each of the
 		# phi-nodes-that-I-feed's virtual registers, then
 		# new_instructions.append(those i2is);
 		for phi_num in block.outgoing_phis:
 			dprint(f"phi_num = {phi_num}");
 			phi = block.expression_table.vntoex(phi_num);
 			valnum = block.expression_table.vrtovn(phi.register);
-			i2i = Instruction("i2i", [valnum], [phi_num]);
+			i2i = Instruction("i2i", [valnum], phi_num);
 			new_instructions.append(i2i);
-		
-		before = block.instructions[-1].op;
-		after = jump.op;
-		
-		match (before, after):
+
+	#		# the paperwork for the expression_table will be handled at the usages'
+	#		# blocks. Inserting these i2i's will just be for the assembly.
+	#		# Globals work themselves out, only Phi nodes need this done.
+	#		# can't put the i2i's at the *very* end, you want one before the jump
+	#		# instruction.
+	#		# assert(not "TODO");
+
+		if block.jump is not None:
+			before = block.jump;
 			
-			case _ if before == after: pass;
+			dprint(block.jump);
 			
-			case ("cbr", "cbr_GT"): pass;
-			case ("cbr", "cbr_NE"): pass;
+			lookup[before.op]( \
+				ops = new_instructions, \
+				et = block.expression_table, \
+				ins = before.ins, \
+				out = before.out)
 			
-			case ("cbr", "cbrne"): pass;
+			after = new_instructions.pop();
 			
-			case ("cbrne", "cbr"): pass;
-			case ("cbrne", "cbr_GT"): pass;
-			case ("cbrne", "cbr_NE"): pass;
+			dprint(f"before.op, after.op = {before.op, after.op}");
 			
-			case _:
-				dprint(f"block.instructions[-1].op = {block.instructions[-1].op}");
-				dprint(f"jump.op = {jump.op}");
-				assert(not "TODO");
-		
-		new_instructions.append(jump);
-		
-		# the paperwork for the expression_table will be handled at the usages'
-		# blocks. Inserting these i2i's will just be for the assembly.
-		# Globals work themselves out, only Phi nodes need this done.
-		# can't put the i2i's at the *very* end, you want one before the jump
-		# instruction.
-		# assert(not "TODO");
+			match (before.op, after.op):
+				
+				case _ if before.op == after.op: pass;
+				
+				case ("cbr", "cbr_GT"): pass;
+				case ("cbr", "cbr_NE"): pass;
+				
+				case ("cbr", "cbrne"): pass;
+				
+				case ("cbrne", "cbr"): pass;
+				case ("cbrne", "cbr_GE"): pass;
+				case ("cbrne", "cbr_GT"): pass;
+				case ("cbrne", "cbr_NE"): pass;
+				
+				case _:
+					assert(not "TODO");
+			
+			block.jump = after;
 		
 		block.instructions = new_instructions;
 		

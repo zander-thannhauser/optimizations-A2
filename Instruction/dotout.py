@@ -11,11 +11,11 @@ def Instruction_dotout(self, stream):
 	dprint(f"self.ins = {self.ins}");
 	dprint(f"self.out = {self.out}");
 	
-	me = self.out if self.out else id(self);
-	
 	if type(self.out) is int:
+		me = self.out;
 		color = f"{self.out / ExpressionTable.valcounter} 1 1";
 	else:
+		me = id(self);
 		color = "white";
 	
 	def connect_param(src, port, stream):
@@ -93,6 +93,11 @@ def Instruction_dotout(self, stream):
 			me = id(self);
 			connect_param(inner, f"1", stream);
 			ins = f"<1> {inner}";
+			phi_num = self.out;
+			color = f"{phi_num / ExpressionTable.valcounter} 1 1";
+			print(f"""
+				"{me}":s -> "{phi_num}" [color="{color}"];
+			""", file = stream);
 		
 		case "iwrite":
 			inner,  = self.ins;

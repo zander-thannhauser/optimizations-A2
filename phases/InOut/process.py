@@ -45,24 +45,33 @@ def InOutPhase_process(self, all_blocks, **_):
 			assert(not "undefined register used!");
 	else:
 		# the last instruction might need something too (conditional branch):
-		ins.update(i for i in block.instructions[-1].ins if i.startswith("%vr"));
+		
+		if block.jump:
+			ins.update(i for i in block.jump.ins if i.startswith("%vr"));
 		
 		dprint(f"ins = {ins}");
 		dprint(f"outs = {outs}");
 		
-		for inst in block.instructions[-2::-1]:
-			dprint(inst);
-			if (inst.out in ins) or \
-					inst.op in ["i2i", "iwrite", "store"]:
+		new_instructions = [];
+		
+		for inst in block.instructions[::-1]:
+			dprint(f"inst = {inst}");
+			# dprint(f"inst.out = {inst.out}");
+			
+			if (inst.out in ins) or inst.op in ["i2i", "iwrite", "store", "ret"]:
+				# either it's useful or protected:
 				if inst.op == "i2i":
 					outs.add(inst.out);
 				ins.discard(inst.out);
 				ins.update(i for i in inst.ins if i.startswith("%vr"));
+				new_instructions.insert(0, inst);
 			else:
-				inst.useless = True;
+				dprint("USELESS!");
+		
+		block.instructions = new_instructions;
 	
 	dprint(f"ins = {ins}, outs = {outs}");
-	
+	 #assert(not "CHECK");
 	
 	if "in-out" not in block.has_done or block.ins != ins:
 		for parent in block.parents:

@@ -9,7 +9,7 @@ from Instruction.self import Instruction;
 from ExpressionTable.Constant.self import Constant;
 from ExpressionTable.Expression.self import Expression;
 
-def optimize_cbr(ops, et, ins, out):
+def optimize_cbr(ops, et, ins, out, label):
 	enter(f"optimize_cbr(ins = {ins}, out = {out})");
 	
 	ivn = et.vrtovn(ins[0]);
@@ -29,7 +29,7 @@ def optimize_cbr(ops, et, ins, out):
 			assert(not "TODO");
 		
 		case Expression(op = "cmp_GT", ins = [X, Y]):
-			ops.append(Instruction("cbr_GT", [X, Y], out));
+			ops.append(Instruction("cbr_GT", [X, Y], out, label));
 		
 		case Expression(op = "cmp_GE", ins = [X, Y]):
 			# ops.append(("cbr_GE", [X, Y], "->", outs));
@@ -62,11 +62,11 @@ def optimize_cbr(ops, et, ins, out):
 			assert(not "TODO");
 		
 		case Expression(op = "not", ins = [X]):
-			ops.append(Instruction("cbrne", [X], out));
+			ops.append(Instruction("cbrne", [X], out, label));
 		
 		# default:
 		case (iex):
-			ops.append(Instruction("cbr", [ivn], out));
+			ops.append(Instruction("cbr", [ivn], out, label));
 	
 
 	exit("return;");

@@ -7,7 +7,7 @@ from Instruction.self import Instruction;
 
 from .common import load_literal;
 
-def optimize_loadI(ops, et, ins, out):
+def optimize_loadI(ops, et, ins, out, label):
 	enter(f"optimize_loadI(ins = {ins}, out = {out})");
 	
 	try:

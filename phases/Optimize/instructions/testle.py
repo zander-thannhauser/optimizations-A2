@@ -6,7 +6,7 @@ from .common import load_literal, consider;
 from ExpressionTable.Constant.self import Constant;
 from ExpressionTable.Expression.self import Expression;
 
-def optimize_testle(ops, et, ins, out):
+def optimize_testle(ops, et, ins, out, label):
 	enter(f"optimize_testle(ins = {ins}, out = {out})");
 	
 	ivn = et.vrtovn(ins[0]);

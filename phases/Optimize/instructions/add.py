@@ -86,7 +86,7 @@ def optimize_add_vr(ops, et, lvn, rvn, out = None):
 	return retval;
 
 
-def optimize_add(ops, et, ins, out):
+def optimize_add(ops, et, ins, out, label):
 	enter(f"optimize_add(ins = {ins}, out = {out})");
 	
 	lvn, rvn = et.vrtovn(ins[0]), et.vrtovn(ins[1])

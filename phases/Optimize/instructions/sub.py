@@ -99,7 +99,7 @@ def optimize_sub_vr(ops, et, lvn, rvn, out = None):
 	return retval;
 
 
-def optimize_sub(ops, et, ins, out):
+def optimize_sub(ops, et, ins, out, label):
 	enter(f"optimize_sub(ins = {ins}, out = {out})");
 	
 	lvn, rvn = et.vrtovn(ins[0]), et.vrtovn(ins[1])

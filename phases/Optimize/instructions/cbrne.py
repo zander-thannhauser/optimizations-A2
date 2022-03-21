@@ -9,7 +9,7 @@ from Instruction.self import Instruction;
 from ExpressionTable.Constant.self import Constant;
 from ExpressionTable.Expression.self import Expression;
 
-def optimize_cbrne(ops, et, ins, out):
+def optimize_cbrne(ops, et, ins, out, label):
 	enter(f"optimize_cbrne(ins = {ins}, out = {out})");
 	
 	ivn = et.vrtovn(ins[0]);
@@ -21,7 +21,7 @@ def optimize_cbrne(ops, et, ins, out):
 			assert(not "TODO");
 		
 		case Expression(op = "cmp_LT", ins = [X, Y]):
-			ops.append(Instruction("cbr_GE", [X, Y], out));
+			ops.append(Instruction("cbr_GE", [X, Y], out, label));
 		
 		case Expression(op = "cmp_LE", ins = [X, Y]):
 			assert(not "TODO");
@@ -34,7 +34,7 @@ def optimize_cbrne(ops, et, ins, out):
 		
 		case Expression(op = "cmp_EQ", ins = [X, Y]):
 			# check for using a move instruction's result
-			ops.append(Instruction("cbr_NE", [X, Y], out));
+			ops.append(Instruction("cbr_NE", [X, Y], out, label));
 		
 		case Expression(op = "cmp_NE", ins = [X, Y]):
 			# check for using a move instruction's result

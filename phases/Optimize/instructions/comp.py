@@ -7,7 +7,7 @@ from ExpressionTable.Expression.self import Expression;
 from .common import consider;
 from .common import load_literal;
 
-def optimize_comp(ops, et, ins, out):
+def optimize_comp(ops, et, ins, out, label):
 	enter(f"optimize_comp(ins = {ins}, out = {out})");
 	
 	lvn, rvn = et.vrtovn(ins[0]), et.vrtovn(ins[1])

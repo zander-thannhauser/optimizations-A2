@@ -6,7 +6,7 @@ from .common import load_literal, consider;
 from ExpressionTable.Constant.self import Constant;
 from ExpressionTable.Expression.self import Expression;
 
-def optimize_mult(ops, et, ins, out):
+def optimize_mult(ops, et, ins, out, label):
 	enter(f"optimize_mult(ins = {ins}, out = {out})");
 	
 	lvn, rvn = et.vrtovn(ins[0]), et.vrtovn(ins[1])

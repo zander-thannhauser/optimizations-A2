@@ -37,7 +37,7 @@ def optimize_testeq_vr(ops, et, ivn, out):
 	return retval;
 
 
-def optimize_testeq(ops, et, ins, out):
+def optimize_testeq(ops, et, ins, out, label):
 	enter(f"optimize_testeq(ins = {ins}, out = {out})");
 	
 	ivn = et.vrtovn(ins[0]);

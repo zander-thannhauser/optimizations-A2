@@ -121,8 +121,25 @@ def reverse_postorder_rank(b):
 	b.rpo = rpo_counter;
 	rpo_counter += 1;
 
-def print_asm(p):
-	assert(not "TODO");
+def print_asm(block, p):
+	# for inst in block.instructions:
+	p.comment("block.rpo = %i:", block.rpo);
+	
+	if block.label and len(block.parents) > 1:
+		p.printf("%s:", block.label, prefix = "");
+	
+	for inst in block.instructions:
+		inst.print(p);
+	
+	if block.jump is not None:
+		block.jump.print(p);
+	elif block.children_labels[0] == "(return)":
+		p.print("ret");
+	
+	for child in block.children:
+		if "printed-assembly" not in child.has_done:
+			child.has_done.add("printed-assembly");
+			print_asm(child, p);
 
 def process_frame(t, p):
 	
@@ -177,97 +194,9 @@ def process_frame(t, p):
 			if me not in todo:
 				heappush(todo, me);
 	
+	print_asm(start, p);
+	
 	exit("process_frame");
-	
-	# print_asm(p);
-	# assert(not "TODO");
-	
-#	all_blocks = [];
-#	start.idom = start;
-#	start.expression_tables = ExpressionTable();
-	
-	# fill start.expression_tables with vr{0,1,2,3} and parameters
-	
-	# rank should be assigned so that blocks would be traversed
-	# in reverse postorder
-	
-	# push phase 1, 2, 3, 4, 5 on start block
-	
-	# heap(key = (phase, rank))
-	
-	# phase 0:
-		# I lost a parent
-		# if self has any remaining parents:
-			# push block into doing phase 1
-			# push block's parents into doing phase 2
-			# increment phase 3 counter
-			# push block into doing phase 3
-		# otherwise:
-			# I'm unreachable
-			# for each child:
-				# self.children.remove(block)
-				# block.parents.remove(self)
-				# push child ininto doinging phase 0
-	# phase 1:
-		# assert(not unreachable)
-		# if self.i2is not defined (or None):
-			# skim my `i2i`s and save to self.i2is
-		# pass subscripted registers to children's inputs:
-		# if changed:
-			# push children into doing phase 1
-	# phase 2:
-		# assert(not unreachable)
-		# (most) parents (need to) already have their idoms
-		# so I'm going to traverse upwards and figure out mine
-		# if changed:
-			# push children into doing phase 2
-	# phase 3:
-		# assert(not unreachable)
-		# push children into doing phase 3
-		# turn my block inputs (sets or ints) into value numbers
-		# A1 optimization
-		# if the conditional branch changed
-			# self.children.remove(block)
-			# block.parents.remove(self)
-			# push block into doing phase 0
-	# phase 4:
-		# assert(not unreachable)
-		# output assembly for this block with a child afterwards
-	
-#	assert(not "TODO");
-	
-##	dotout_control(all_blocks);
-##	assert(not "CHECK");
-#	
-#	calc_immediate_dominators(all_blocks);
-##	calc_dominance_frontiers(all_blocks);
-#	
-##	dotout_idoms(all_blocks);
-##	assert(not "CHECK");
-#	
-#	global_expressions = ExpressionTable();
-#	
-#	for b in all_blocks: b.skim_i2is();
-#	
-#	calc_data_flow(all_blocks);
-#	
-#	build_phi_nodes(all_blocks, global_expressions);
-#	
-#	dotout_data(all_blocks, global_expressions);
-#	assert(not "CHECK");
-#	
-#	# for each block: (parents then children on dominator tree)
-#		# block.expressions = immedate-dominator.expressions.copy();
-#			# if start block: use global_expressions instead
-#		# block.optimize();
-#	assert(not "TODO");
-#	
-#	# dot out (show provides and needs)
-#	assert(not "TODO");
-#	
-#	# print out assembly:
-#	# all_blocks[0].print_asm(set());
-#	assert(not "TODO");
 	
 
 

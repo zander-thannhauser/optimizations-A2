@@ -77,7 +77,8 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				ops = new_instructions, \
 				et = block.expression_table, \
 				ins = instruction.ins, \
-				out = instruction.out)
+				out = instruction.out, \
+				label = instruction.label)
 		
 		# ask expression table for the value number behind each of the
 		# phi-nodes-that-I-feed's virtual registers, then
@@ -109,7 +110,8 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				ops = new_instructions, \
 				et = block.expression_table, \
 				ins = before.ins, \
-				out = before.out)
+				out = before.out, \
+				label = before.label)
 			
 			after = new_instructions.pop();
 			

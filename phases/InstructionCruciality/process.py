@@ -51,7 +51,7 @@ def InstructionCruciality_process(self, **_):
 	if not inst.is_critical:
 		dprint(f"inst: {inst}");
 		match inst.op:
-			case "loadI":
+			case "loadI" | "ret":
 				pass;
 			case "iwrite" | "swrite" | "cbrne" | "cbr" | "i2i":
 				src, = inst.ins;
@@ -60,14 +60,20 @@ def InstructionCruciality_process(self, **_):
 				inner, const = inst.ins;
 				submit(inner);
 			case "cbr_GT" | "cbr_GE" | "cbr_NE" | "cbr_EQ" | "cbr_LE" \
+					| "cmp_LE" \
 					| "loadAO" | "add":
 				left, right = inst.ins;
 				submit(left);
 				submit(right);
 			case "storeAI":
-				base, offset, const = inst.ins;
+				value, base, offset = inst.ins;
+				submit(value);
 				submit(base);
-				submit(offset);
+			case "storeAO":
+				value, base, index = inst.ins;
+				submit(value);
+				submit(base);
+				submit(index);
 			case _:
 				assert(not "TODO");
 		

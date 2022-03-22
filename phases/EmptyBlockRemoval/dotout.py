@@ -5,9 +5,9 @@ from phases.self import Phase;
 
 from ExpressionTable.self import ExpressionTable;
 
-def DeadCodeRemoval_dotout(self, all_blocks, expression_table, **_):
+def EmptyBlockRemoval_dotout(self, all_blocks, expression_table, **_):
 	
-	enter("DeadCodeRemoval.dotout()");
+	enter("EmptyBlockRemoval.dotout()");
 	
 	stream = open(f"gen/{Phase.counter}.txt", "w");
 	
@@ -89,26 +89,5 @@ digraph mygraph {
 	Phase.counter += 1;
 	
 	exit("return;");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

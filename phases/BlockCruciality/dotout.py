@@ -54,10 +54,17 @@ digraph mygraph {
 		if block.jump:
 			instructions.append(block.jump);
 		
-		for inst in instructions:
-			me = inst.dotout(stream);
-			
-			inst_keys.append(me);
+		if len(instructions) == 0:
+			key = f"{bid}_empty";
+			print(f"""
+				\"{key}\" [label="(empty)" color=\"white\"];
+			""", file = stream);
+			inst_keys = [key];
+		else:
+			for inst in instructions:
+				me = inst.dotout(stream);
+				
+				inst_keys.append(me);
 		
 		all_instruction_ids[block.rpo] = inst_keys;
 	

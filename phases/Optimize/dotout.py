@@ -53,7 +53,13 @@ digraph mygraph {
 		if block.jump:
 			instructions.append(block.jump);
 		
-		if "optimized" in block.has_done:
+		if len(instructions) == 0:
+			key = f"{bid}_empty";
+			print(f"""
+				\"{key}\" [label="(empty)" color=\"white\"];
+			""", file = stream);
+			inst_keys = [key];
+		elif "optimized" in block.has_done:
 			for inst in instructions:
 				me = inst.dotout(stream);
 				

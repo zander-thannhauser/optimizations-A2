@@ -14,8 +14,7 @@ def optimize_testgt(ops, et, ins, out, label):
 	match (et.vntoex(ivn)):
 		# constant-fold:
 		case Constant(value = c):
-#			load_literal(ops, 1 if c == 0 else 0, out);
-			assert(not "TODO");
+			valnum = load_literal(ops, et, 1 if c > 0 else 0, out);
 		
 		# substitutions:
 		case Expression(op = "comp", ins = [X, Y]):

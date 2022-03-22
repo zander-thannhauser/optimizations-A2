@@ -14,49 +14,49 @@
 	  loadI   0             -> %vr8
 	  loadI   1             -> %vr11
 	  loadI   4             -> %vr12
-	  storeAI %vr8         => %vr0, -4
+	  storeAI %vr8         => %vr0,     -4
 	  loadI   2             -> %vr13
-	  storeAI %vr11         => %vr0, -8
+	  storeAI %vr11         => %vr0,     -8
 	  loadI   3             -> %vr15
 	  loadI   8             -> %vr16
-	  storeAI %vr13         => %vr0, -12
-	  storeAI %vr15         => %vr0, -16
+	  storeAI %vr13         => %vr0,     -12
+	  storeAI %vr15         => %vr0,     -16
 	  loadI   5             -> %vr20
-	  storeAI %vr12         => %vr0, -20
+	  storeAI %vr12         => %vr0,     -20
 	  loadI   6             -> %vr23
-	  storeAI %vr20         => %vr0, -24
+	  storeAI %vr20         => %vr0,     -24
 	  loadI   7             -> %vr26
-	  storeAI %vr23         => %vr0, -28
-	  storeAI %vr26         => %vr0, -32
+	  storeAI %vr23         => %vr0,     -28
+	  storeAI %vr26         => %vr0,     -32
 	  loadI   9             -> %vr31
-	  storeAI %vr16         => %vr0, -36
-	  storeAI %vr31         => %vr0, -40
+	  storeAI %vr16         => %vr0,     -36
+	  storeAI %vr31         => %vr0,     -40
 	  loadI   11             -> %vr37
-	  storeAI %vr16         => %vr0, -44
-	  storeAI %vr26         => %vr0, -48
-	  storeAI %vr23         => %vr0, -52
-	  storeAI %vr20         => %vr0, -56
-	  storeAI %vr12         => %vr0, -60
-	  storeAI %vr15         => %vr0, -64
-	  storeAI %vr13         => %vr0, -68
-	  storeAI %vr11         => %vr0, -72
-	  storeAI %vr8         => %vr0, -76
-	  storeAI %vr8         => %vr0, -80
-	  storeAI %vr11         => %vr0, -84
-	  storeAI %vr15         => %vr0, -88
-	  storeAI %vr20         => %vr0, -92
-	  storeAI %vr26         => %vr0, -96
-	  storeAI %vr31         => %vr0, -100
-	  storeAI %vr37         => %vr0, -104
-	  storeAI %vr12         => %vr0, -108
-	  storeAI %vr15         => %vr0, -112
-	  storeAI %vr13         => %vr0, -116
-	  storeAI %vr11         => %vr0, -120
-	  storeAI %vr31         => %vr0, -124
-	  storeAI %vr16         => %vr0, -128
-	  storeAI %vr26         => %vr0, -132
-	  storeAI %vr23         => %vr0, -136
-	  storeAI %vr8         => %vr0, -140
+	  storeAI %vr16         => %vr0,     -44
+	  storeAI %vr26         => %vr0,     -48
+	  storeAI %vr23         => %vr0,     -52
+	  storeAI %vr20         => %vr0,     -56
+	  storeAI %vr12         => %vr0,     -60
+	  storeAI %vr15         => %vr0,     -64
+	  storeAI %vr13         => %vr0,     -68
+	  storeAI %vr11         => %vr0,     -72
+	  storeAI %vr8         => %vr0,     -76
+	  storeAI %vr8         => %vr0,     -80
+	  storeAI %vr11         => %vr0,     -84
+	  storeAI %vr15         => %vr0,     -88
+	  storeAI %vr20         => %vr0,     -92
+	  storeAI %vr26         => %vr0,     -96
+	  storeAI %vr31         => %vr0,     -100
+	  storeAI %vr37         => %vr0,     -104
+	  storeAI %vr12         => %vr0,     -108
+	  storeAI %vr15         => %vr0,     -112
+	  storeAI %vr13         => %vr0,     -116
+	  storeAI %vr11         => %vr0,     -120
+	  storeAI %vr31         => %vr0,     -124
+	  storeAI %vr16         => %vr0,     -128
+	  storeAI %vr26         => %vr0,     -132
+	  storeAI %vr23         => %vr0,     -136
+	  storeAI %vr8         => %vr0,     -140
 	  loadAI  %vr0, -8     => %vr79
 	  i2i     %vr11         => %vr4
 	  cbrne   %vr79         -> .L0
@@ -65,7 +65,7 @@
 	  addI    %vr4, -1     => %vr82
 	  multI   %vr4, -4     => %vr89
 	  add     %vr0, %vr89 => %vr90
-	  storeAI %vr82         => %vr90, -220
+	  storeAI %vr82         => %vr90,     -220
 	  addI    %vr4, 1     => %vr92
 	  loadAI  %vr90, -8     => %vr96
 	  i2i     %vr92         => %vr4
@@ -80,7 +80,7 @@
 	  addI    %vr5, -1     => %vr101
 	  multI   %vr5, -80     => %vr107
 	  add     %vr0, %vr107 => %vr108
-	  storeAI %vr101         => %vr108, -144
+	  storeAI %vr101         => %vr108,     -144
 	  addI    %vr5, 1     => %vr110
 	  multI   %vr5, -4     => %vr114
 	  add     %vr0, %vr114 => %vr115
@@ -102,7 +102,7 @@
 	  multI   %vr127, -4     => %vr134
 	  add     %vr0, %vr134 => %vr135
 	  loadAI  %vr135, -56     => %vr137
-	  storeAI %vr137         => %vr135, -140
+	  storeAI %vr137         => %vr135,     -140
 	  multI   %vr6, -4     => %vr143
 	  add     %vr0, %vr143 => %vr144
 	  loadAI  %vr144, -76     => %vr146
@@ -112,7 +112,7 @@
 	# block.rpo = 9:
 	  loadAI  %vr135, -140     => %vr154
 	  addI    %vr154, 1     => %vr155
-	  storeAI %vr155         => %vr135, -140
+	  storeAI %vr155         => %vr135,     -140
 	# block.rpo = 10:
 	.L8:
 	  loadAI  %vr135, -60     => %vr159
@@ -121,7 +121,7 @@
 	# block.rpo = 11:
 	  loadAI  %vr135, -60     => %vr163
 	  addI    %vr163, 1     => %vr164
-	  storeAI %vr164         => %vr135, -140
+	  storeAI %vr164         => %vr135,     -140
 	# block.rpo = 12:
 	.L9:
 	  loadAI  %vr135, -136     => %vr168
@@ -130,7 +130,7 @@
 	# block.rpo = 13:
 	  loadAI  %vr135, -136     => %vr172
 	  addI    %vr172, 1     => %vr173
-	  storeAI %vr173         => %vr135, -140
+	  storeAI %vr173         => %vr135,     -140
 	# block.rpo = 14:
 	.L10:
 	  addI    %vr7, 1     => %vr174
@@ -149,4 +149,5 @@
 	  add     %vr0, %vr187 => %vr188
 	  loadAI  %vr188, -140     => %vr190
 	  iwrite  %vr190              
+	# block.rpo = 17:
 	  ret

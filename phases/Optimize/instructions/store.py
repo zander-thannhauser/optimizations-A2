@@ -21,24 +21,7 @@ def optimize_store(ops, et, ins, out, label):
 		
 		# store X, (Y + Z) => storeAO X -> Y, Z
 		case Expression(op = "add", ins = [X, Y]):
-			assert(not "TODO");
-		
-		# store (sub X, ("multI", Y, c)) => Z === storeAO X, (multI, Y -c) => Z
-		case Expression(op = "sub", ins = [X, Y]):
-			assert(not "TODO");
-			# check for using a move instruction's result
-#			if     (X != "%vr0" and X in vrtogvn_lookup.values()) \
-#				or (Y != "%vr0" and Y in vrtogvn_lookup.values()):
-#				ops.append(("store", [ivn], "=>", [ovn]));
-#			else:
-#				subex = vntoex(Y);
-#				if subex[0] == "multI":
-#					subvn = consider(ops, ("multI", subex[1], -subex[2]));
-#					ops.append(("storeAO", [ivn], "=>", [X, subvn]));
-#				elif subex[0] == "sub":
-#					assert(not "TODO");
-#				else:
-#					ops.append(("store", [ivn], "=>", [ovn]));
+			ops.append(Instruction("storeAO", [ivn, X, Y], None));
 		
 		# default:
 		case (oexp):

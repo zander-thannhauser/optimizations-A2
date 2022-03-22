@@ -122,6 +122,13 @@ def Instruction_dotout(self, stream):
 			connect_param(dest,  f"2", stream);
 			ins = f"<1> {value} | <2> {dest} | <3> {offset}";
 		
+		case "storeAO":
+			value, dest, offset = self.ins;
+			connect_param(value, f"1", stream);
+			connect_param(dest,  f"2", stream);
+			connect_param(offset,  f"3", stream);
+			ins = f"<1> {value} | <2> {dest} | <3> {offset}";
+		
 		case "sub":
 			left, right = self.ins;
 			connect_param(left, f"1", stream);

@@ -12,6 +12,7 @@ class Phase:
 	BLOCK_CRUCIALITY = 9;
 	INSTRUCTION_CRUCIALITY = 10;
 	DEAD_CODE_REMOVAL = 11;
+	EMPTY_BLOCK_REMOVAL = 12;
 
 from .init import Phase_init;
 

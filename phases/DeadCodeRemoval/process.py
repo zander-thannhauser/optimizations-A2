@@ -17,6 +17,9 @@ def DeadCodeRemoval_process(self, **_):
 			dprint(f"inst: {inst}");
 			del block.valnum_to_instruction[inst.out];
 	
+	if block.jump is not None and not block.jump.is_critical:
+		assert(not "TODO");
+	
 	block.instructions = new_instructions;
 	
 	todo = [];

@@ -19,6 +19,7 @@ from phases.ImmediateDominator.self import ImmediateDominatorPhase;
 from phases.Optimize.self import OptimizePhase;
 from phases.SuperficalCruciality.self import SuperficalCruciality;
 from phases.DeadCodeRemoval.self import DeadCodeRemoval;
+from phases.EmptyBlockRemoval.self import EmptyBlockRemoval;
 
 from ExpressionTable.self import ExpressionTable;
 
@@ -139,19 +140,28 @@ def print_asm(block, p):
 	if block.jump is not None:
 		block.jump.print(p);
 	
-	dprint(f"block.children = {[str(b) for b in block.children]}");
-	
 	for i, child in enumerate(block.children):
-		dprint(f"child = {child}");
-		if len(child.instructions) == 0:
-			assert(child.jump is not None);
-			child.jump.print(p);
-		elif "printed-assembly" not in child.has_done:
-			child.has_done.add("printed-assembly");
-			print_asm(child, p);
-		elif i == 0:
-			assert(not "my fallthrough-child has already been printed"
-				"insert jumpI instruction to the child");
+		
+		dprint(f"children[{i}] = {child}");
+		
+		match (i, "printed-assembly" in child.has_done):
+			
+			# fallthrough child, assembly already printed
+			case (0, True):
+				assert(not "JumpI {child}");
+			
+			# not fallthrough, assembly already printed
+			case (_, True):
+				pass;
+			
+			# any child with assembly that has yet to print:
+			case (_, False):
+				child.has_done.add("printed-assembly");
+				print_asm(child, p);
+			
+			case conditions:
+				dprint(f"conditions = {conditions}");
+				assert(not "TODO");
 	
 	exit("return;");
 
@@ -185,6 +195,7 @@ def process_frame(t, p):
 		## BlockCruciality(),           # bottom-up
 		## InstructionCruciality(),     # bottom-up
 		DeadCodeRemoval(start),         # top-down
+		EmptyBlockRemoval(start),       # top-down
 	];
 	
 	args = {
@@ -197,13 +208,9 @@ def process_frame(t, p):
 	
 	while len(todo):
 		# print([str(p) for p in todo]);
-		
 		phase = heappop(todo);
-		
 		addmes = phase.process(**args);
-		
 		phase.dotout(**args);
-		
 		for me in addmes:
 			if me not in todo:
 				heappush(todo, me);

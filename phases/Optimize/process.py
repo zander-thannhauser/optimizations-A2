@@ -78,6 +78,8 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				out = instruction.out, \
 				label = instruction.label)
 		
+		volatile_registers = set();
+		
 		# ask expression table for the value number behind each of the
 		# phi-nodes-that-I-feed's virtual registers, then
 		# new_instructions.append(those i2is);
@@ -87,6 +89,7 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 			valnum = block.expression_table.vrtovn(phi.register);
 			i2i = Instruction("i2i", [valnum], phi_num);
 			new_instructions.append(i2i);
+			volatile_registers.add(phi_num);
 
 	#		# the paperwork for the expression_table will be handled at the usages'
 	#		# blocks. Inserting these i2i's will just be for the assembly.
@@ -104,12 +107,15 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 			
 			dprint(block.jump);
 			
+			wrote_i2is = len(block.outgoing_phis) > 0;
+			
 			lookup[before.op]( \
 				ops = new_instructions, \
 				et = block.expression_table, \
 				ins = before.ins, \
 				out = before.out, \
-				label = before.label)
+				label = before.label, \
+				volatile = volatile_registers)
 			
 			after = new_instructions.pop();
 			
@@ -135,6 +141,13 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				# remove the jump instruction, have this block consider
 				# it's one parent as it's fallthrough.
 					# and push old paperwork phases.
+				
+				case ("cbr", "i2i"):
+					new_instructions.append(after);
+					keep, lose = block.children;
+					lose.parents.remove(block);
+					block.children = [keep];
+					after = None;
 				
 				case _:
 					assert(not "TODO");

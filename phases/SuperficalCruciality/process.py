@@ -19,10 +19,20 @@ def SuperficalCruciality_process(self, **_):
 					| "multI"  | "loadAO" \
 					| "cmp_GT" | "cmp_EQ" | "cmp_LT" | "cmp_NE" | "cmp_LE":
 				pass;
-			case "storeAI" | "iwrite" | "swrite":
+			case "storeAI" | "storeAO" | "iwrite" | "swrite":
 				todo.append(InstructionCruciality(inst, block));
 			case _:
 				dprint(f"inst.op = {inst.op}");
+				assert(not "TODO");
+	
+	if block.jump is not None:
+		match block.jump.op:
+			case "ret":
+				todo.append(InstructionCruciality(block.jump, block));
+			case "cbr" | "cbr_GT" | "cbr_GE" | "cbr_LE" | "cbr_EQ" | "cbrne":
+				pass;
+			case jop:
+				dprint(f"jop = {jop}");
 				assert(not "TODO");
 	
 	for child in block.children:

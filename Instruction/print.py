@@ -23,8 +23,13 @@ def Instruction_print(self, p):
 		
 		case "loadAI":  p.printf("loadAI  %%vr%i, %i     => %%vr%i", *self.ins, self.out);
 		case "loadAO":  p.printf("loadAO  %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
-		case "storeAI": p.printf("storeAI %%vr%i         => %%vr%i, %i", *self.ins);
+		
+		case "storeAI": p.printf("storeAI %%vr%i         => %%vr%i,     %i", *self.ins);
+		case "storeAO": p.printf("storeAO %%vr%i         => %%vr%i, %%vr%i", *self.ins);
+		
 		case "i2i":     p.printf("i2i     %%vr%i         => %%vr%i", *self.ins, self.out);
+		
+		case "cmp_LE":  p.printf("cmp_LE  %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		
 		case "cbr":     p.printf("cbr     %%vr%i         -> %s", *self.ins, self.label);
 		case "cbrne":   p.printf("cbrne   %%vr%i         -> %s", *self.ins, self.label);
@@ -33,6 +38,7 @@ def Instruction_print(self, p):
 		case "cbr_GE":  p.printf("cbr_GE  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
 		case "cbr_EQ":  p.printf("cbr_EQ  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
 		case "cbr_LE":  p.printf("cbr_LE  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
+		
 		case "ret":     p.printf("ret");
 		
 		case "iwrite":  p.printf("iwrite  %%vr%i              ", *self.ins);

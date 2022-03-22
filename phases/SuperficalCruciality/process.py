@@ -14,12 +14,15 @@ def SuperficalCruciality_process(self, **_):
 	
 	for inst in block.instructions:
 		match inst.op:
-			case "loadI" | "addI" | "add" \
-					| "loadAI" | "comp" | "not" | "i2i" \
+			case "addI" | "add" | "fadd" | "mult" | "fmult" \
+					| "load" | "fload" | "loadI" | "loadAI" \
+					| "comp" | "not" | "i2i" | "i2f" | "f2i" \
 					| "multI"  | "loadAO" \
 					| "cmp_GT" | "cmp_EQ" | "cmp_LT" | "cmp_NE" | "cmp_LE":
 				pass;
-			case "storeAI" | "storeAO" | "iwrite" | "swrite":
+			case "call" \
+				| "store" | "storeAI" | "storeAO" \
+				| "iwrite" | "swrite":
 				todo.append(InstructionCruciality(inst, block));
 			case _:
 				dprint(f"inst.op = {inst.op}");
@@ -42,6 +45,22 @@ def SuperficalCruciality_process(self, **_):
 	
 	exit(f"return {[str(t) for t in todo]}");
 	return todo;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -29,41 +29,75 @@ def Instruction_dotout(self, stream):
 			left, right = self.ins;
 			connect_param(left, f"1", stream);
 			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
+			ins = f"<1> %vr{left} | <2> %vr{right}";
 		
 		case "addI":
 			value, const = self.ins;
 			connect_param(value, f"1", stream);
-			ins = f"<1> {value} | <2> {const}";
+			ins = f"<1> %vr{value} | <2> {const}";
 		
 		case "cbr":
 			inner,  = self.ins;
 			connect_param(inner, f"1", stream);
-			ins = f"<1> {inner}";
+			ins = f"<1> %vr{inner}";
 		
 		case "cbr_GT" | "cbr_NE" | "cbr_GE" | "cbr_EQ" | "cbr_LE" \
 				| "cmp_GT" | "cmp_LT" | "cmp_EQ" | "cmp_NE" | "cmp_LE":
 			left, right = self.ins;
 			connect_param(left, f"1", stream);
 			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
+			ins = f"<1> %vr{left} | <2> %vr{right}";
 		
 		case "cbrne":
 			inner,  = self.ins;
 			connect_param(inner, f"1", stream);
-			ins = f"<1> {inner}";
+			ins = f"<1> %vr{inner}";
+		
+		case "call":
+			ins = f"{self.label}";
+			for i, param in enumerate(self.ins):
+				port = f"{i + 1}"
+				connect_param(param, port, stream);
+				ins += f" | <{port}> %vr{param}";
 		
 		case "comp":
 			left, right = self.ins;
 			connect_param(left, f"1", stream);
 			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
+			ins = f"<1> %vr{left} | <2> %vr{right}";
+		
+		case "f2i":
+			inner,  = self.ins;
+			connect_param(inner, f"1", stream);
+			ins = f"<1> %vr{inner}";
+		
+		case "fload":
+			address, = self.ins;
+			connect_param(address, f"1", stream);
+			ins = f"<1> %vr{address}";
+		
+		case "fadd":
+			left, right = self.ins;
+			connect_param(left, f"1", stream);
+			connect_param(right, f"2", stream);
+			ins = f"<1> %vr{left} | <2> %vr{right}";
+		
+		case "fmult":
+			left, right = self.ins;
+			connect_param(left, f"1", stream);
+			connect_param(right, f"2", stream);
+			ins = f"<1> %vr{left} | <2> %vr{right}";
+		
+		case "i2f":
+			inner,  = self.ins;
+			connect_param(inner, f"1", stream);
+			ins = f"<1> %vr{inner}";
 		
 		case "i2i":
 			inner,  = self.ins;
 			me = id(self);
 			connect_param(inner, f"1", stream);
-			ins = f"<1> {inner}";
+			ins = f"<1> %vr{inner}";
 			phi_num = self.out;
 			color = f"{phi_num / ExpressionTable.valcounter} 1 1";
 			print(f"""
@@ -73,22 +107,27 @@ def Instruction_dotout(self, stream):
 		case "iwrite":
 			inner,  = self.ins;
 			connect_param(inner, f"1", stream);
-			ins = f"<1> {inner}";
+			ins = f"<1> %vr{inner}";
 		
-		case "jumpI":
-			inner,  = self.ins;
-			ins = f"<1> {inner}";
+#		case "jumpI":
+#			inner,  = self.ins;
+#			ins = f"<1> {inner}";
+		
+		case "load":
+			address, = self.ins;
+			connect_param(address, f"1", stream);
+			ins = f"<1> %vr{address}";
 		
 		case "loadAI":
 			base, offset = self.ins;
 			connect_param(base, f"1", stream);
-			ins = f"<1> {base} | <2> {offset}";
+			ins = f"<1> %vr{base} | <2> {offset}";
 		
 		case "loadAO":
 			left, right = self.ins;
 			connect_param(left, f"1", stream);
 			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
+			ins = f"<1> %vr{left} | <2> %vr{right}";
 		
 		case "loadI":
 			literal,  = self.ins;
@@ -96,7 +135,7 @@ def Instruction_dotout(self, stream):
 				case Constant():
 					ins = f"<1> {literal.value}"
 				case str():
-					ins = f"<1> \"{literal}\""
+					ins = f"<1> {literal}"
 				case _:
 					assert(not "TODO");
 		
@@ -104,41 +143,50 @@ def Instruction_dotout(self, stream):
 			ins = ""
 		
 		case "mult":
-			assert(not "TODO");
+			left, right = self.ins;
+			connect_param(left, f"1", stream);
+			connect_param(right, f"2", stream);
+			ins = f"<1> %vr{left} | <2> %vr{right}";
 		
 		case "multI":
 			value, const = self.ins;
 			connect_param(value, f"1", stream);
-			ins = f"<1> {value} | <2> {const}";
+			ins = f"<1> %vr{value} | <2> {const}";
 		
 		case "not":
 			inner,  = self.ins;
 			connect_param(inner, f"1", stream);
-			ins = f"<1> {inner}";
+			ins = f"<1> %vr{inner}";
+		
+		case "store":
+			value, dest = self.ins;
+			connect_param(value, f"1", stream);
+			connect_param(dest,  f"2", stream);
+			ins = f"<1> %vr{value} | <2> %vr{dest}";
 		
 		case "storeAI":
 			value, dest, offset = self.ins;
 			connect_param(value, f"1", stream);
 			connect_param(dest,  f"2", stream);
-			ins = f"<1> {value} | <2> {dest} | <3> {offset}";
+			ins = f"<1> %vr{value} | <2> %vr{dest} | <3> {offset}";
 		
 		case "storeAO":
 			value, dest, offset = self.ins;
 			connect_param(value, f"1", stream);
 			connect_param(dest,  f"2", stream);
 			connect_param(offset,  f"3", stream);
-			ins = f"<1> {value} | <2> {dest} | <3> {offset}";
+			ins = f"<1> %vr{value} | <2> %vr{dest} | <3> %vr{offset}";
 		
 		case "sub":
 			left, right = self.ins;
 			connect_param(left, f"1", stream);
 			connect_param(right, f"2", stream);
-			ins = f"<1> {left} | <2> {right}";
+			ins = f"<1> %vr{left} | <2> %vr{right}";
 		
 		case "swrite":
 			inner,  = self.ins;
 			connect_param(inner, f"1", stream);
-			ins = f"<1> {inner}";
+			ins = f"<1> %vr{inner}";
 		
 		case _:
 			dprint(f"self.op == {self.op}");

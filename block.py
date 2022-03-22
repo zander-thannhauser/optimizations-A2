@@ -34,7 +34,7 @@ def read_block(t):
 				instructions.append(Instruction(operation, ins, out));
 			
 			# those who take one in and one out:
-			case "loadI" | "i2i" | "load" \
+			case "loadI" | "i2i" | "i2f" | "f2i" | "load" | "fload" \
 					| "testeq" | "testne" \
 					| "testgt" \
 					| "testne" \
@@ -45,7 +45,8 @@ def read_block(t):
 				instructions.append(Instruction(operation, ins, out));
 			
 			# those who take two in and one out:
-			case "add" | "sub" | "mult" | "comp":
+			case "add" | "sub" | "mult" | "comp" \
+				| "fadd" | "fmult":
 				ins.append(t.token); t.next();
 				assert(t.token == ","); t.next();
 				ins.append(t.token); t.next();
@@ -60,9 +61,6 @@ def read_block(t):
 				ins.append(t.token); t.next();
 				instructions.append(Instruction(operation, ins, out));
 			
-			# nop:
-			case "nop": pass;
-			
 			# branching:
 			case "cbr" | "cbrne":
 				ins.append(t.token); t.next();
@@ -71,6 +69,20 @@ def read_block(t):
 				jump = Instruction(operation, ins, out, branch_label);
 				children.append(branch_label);
 				break;
+			
+			# calls:
+			case "call":
+				func_label = t.token
+				t.next();
+				while t.token == ",":
+					t.next();
+					ins.append(t.token);
+					t.next();
+				# dprint(f"ins = {ins}");
+				instructions.append(Instruction(operation, ins, out, func_label));
+			
+			# nop:
+			case "nop": pass;
 			
 			case "ret":
 				# jump = Instruction("jumpI", ["(return)"], out);

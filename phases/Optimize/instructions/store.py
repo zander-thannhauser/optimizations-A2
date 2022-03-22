@@ -26,8 +26,7 @@ def optimize_store(ops, et, ins, out, label):
 		# default:
 		case (oexp):
 			dprint(f"oexp == {oexp}");
-			assert(not "TODO");
-#			ops.append(("store", [ivn], "=>", [ovn]));
+			ops.append(Instruction("store", [ivn, ovn], None));
 	
 	# apexwvn(ovn, ivn);
 	# assert(not "TODO");

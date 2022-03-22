@@ -35,9 +35,9 @@ def InOutPhase_process(self, all_blocks, **_):
 	
 	if block == all_blocks[0]:
 		# I'm the start block
-		# so I just magically provide %vr{0,1,2,3}
+		# so I just magically provide %vr{0,1,2,3} + args
 		
-		outs.update(["%vr0", "%vr1", "%vr2", "%vr3"]);
+		outs.update(block.magic_provides);
 		
 		ins.difference_update(outs);
 		
@@ -59,7 +59,7 @@ def InOutPhase_process(self, all_blocks, **_):
 			# dprint(f"inst.out = {inst.out}");
 			
 			if (inst.out in ins) or inst.op in \
-					["i2i", "iwrite", "store", "ret", "swrite"]:
+					["i2i", "iwrite", "store", "ret", "swrite", "call"]:
 				# either it's useful or protected:
 				if inst.op == "i2i":
 					outs.add(inst.out);

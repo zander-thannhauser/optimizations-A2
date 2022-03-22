@@ -23,9 +23,7 @@ def optimize_load(ops, et, ins, out, label):
 		
 		case iex:
 			dprint(f"iex = {iex}");
-#			ops.append(("load", [ivn], "=>", [ovn]));
-#			apexwvn(ivn, ovn);
-			assert(not "TODO");
+			ops.append(Instruction("load", [ivn], ovn));
 	
 	et.avrwvn(out, ovn);
 	

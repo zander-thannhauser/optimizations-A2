@@ -68,8 +68,7 @@ def optimize_mult(ops, et, ins, out, label):
 #		# default:
 		case (lex, rex):
 			print(f"lex, rex = {lex}, {rex}");
-			# consider(ops, ("mult", lvn, rvn), out);
-			assert(not "TODO");
+			consider(ops, et, "mult", (lvn, rvn), out);
 	
 	
 	exit("return;");

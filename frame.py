@@ -32,21 +32,28 @@ def setup_start_block(t, p, et):
 	assert(next(t) == ',');
 	framesize = next(t);
 	
-	args = [];
+	vr_args = [];
 	
 	while next(t) == ",":
 		reg = next(t);
 		assert(reg[:3] == "%vr");
-		args.append(reg);
+		vr_args.append(reg);
 	
-	p.printf(".frame %s, %s", name, framesize, prefix = "");
+	vn_args = [];
+	
+	magic_provides = ["%vr0", "%vr1", "%vr2", "%vr3"] + vr_args;
+	
+	for register in magic_provides:
+		valnum = et.mkvn();
+		vn_args.append(valnum);
+		et.avrwvn(register, valnum);
+	
+	p.printf(".frame %s, %s %s", name, framesize, "".join(f", %vr{vn}" for vn in vn_args[4:]), prefix = "");
 	
 	# frame = Instruction(".frame", [name, framesize, *args], []);
 	start = Block("(.frame)", [], ["(fallthrough)"]);
 	
-	for register in ["%vr0", "%vr1", "%vr2", "%vr3"]:
-		valnum = et.mkvn();
-		et.avrwvn(register, valnum);
+	start.magic_provides = magic_provides;
 	
 	return start;
 
@@ -77,10 +84,6 @@ def resolve_references(all_blocks):
 		if b.label:
 			blocks_by_name[b.label] = b;
 	
-	dprint(f"len(all_blocks[0].children) = {len(all_blocks[0].children)}");
-	dprint(f"len(all_blocks[0].children_labels) = {len(all_blocks[0].children_labels)}");
-	dprint(f"len(all_blocks[1].parents)  = {len(all_blocks[1].parents)}");
-	
 	for i, b in enumerate(all_blocks):
 		children = [];
 		dprint(f"i = {i}");
@@ -96,12 +99,6 @@ def resolve_references(all_blocks):
 		for c in children:
 			c.parents.append(b);
 		b.children = children;
-	
-	dprint(f"len(all_blocks[0].children) = {len(all_blocks[0].children)}");
-	dprint(f"len(all_blocks[0].children_labels) = {len(all_blocks[0].children_labels)}");
-	dprint(f"len(all_blocks[1].parents)  = {len(all_blocks[1].parents)}");
-	
-	# assert(not "CHECK");
 	
 	exit("return;");
 
@@ -128,6 +125,8 @@ def reverse_postorder_rank(b):
 
 def print_asm(block, p):
 	enter(f"print_asm(block.rpo = {block.rpo})");
+	
+	p.indent();
 	
 	p.comment("block.rpo = %i:", block.rpo);
 	
@@ -162,6 +161,8 @@ def print_asm(block, p):
 			case conditions:
 				dprint(f"conditions = {conditions}");
 				assert(not "TODO");
+	
+	p.unindent();
 	
 	exit("return;");
 

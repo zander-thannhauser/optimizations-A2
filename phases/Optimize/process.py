@@ -4,9 +4,15 @@ from debug import *;
 from .self import OptimizePhase;
 
 from .instructions.add    import optimize_add;
+from .instructions.call   import optimize_call;
 from .instructions.cbr    import optimize_cbr;
 from .instructions.cbrne  import optimize_cbrne;
 from .instructions.comp   import optimize_comp;
+from .instructions.f2i    import optimize_f2i;
+from .instructions.fadd   import optimize_fadd;
+from .instructions.fload  import optimize_fload;
+from .instructions.fmult  import optimize_fmult;
+from .instructions.i2f    import optimize_i2f;
 from .instructions.i2i    import optimize_i2i;
 from .instructions.loadI  import optimize_loadI;
 from .instructions.mult   import optimize_mult;
@@ -29,9 +35,15 @@ from ExpressionTable.Phi.self import Phi;
 
 lookup = {
 	"add":    optimize_add,
+	"call":   optimize_call,
 	"cbr":    optimize_cbr,
 	"cbrne":  optimize_cbrne,
 	"comp":   optimize_comp,
+	"f2i":    optimize_f2i,
+	"fadd":   optimize_fadd,
+	"fload":  optimize_fload,
+	"fmult":  optimize_fmult,
+	"i2f":    optimize_i2f,
 	"i2i":    optimize_i2i,
 	"loadI":  optimize_loadI,
 	"mult":   optimize_mult,

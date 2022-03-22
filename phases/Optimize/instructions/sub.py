@@ -66,7 +66,8 @@ def optimize_sub_vr(ops, et, lvn, rvn, out = None):
 				retval = consider(ops, et, "addI", (subvn, a - b), out);
 		
 		# (multI X, a) - (multI Y, a) = multI (sub X, Y), a
-		case (Expression(op = "multI", ins = [X, a]), Expression(op = "multI", ins = [Y, b])) if a == b:
+		case (Expression(op = "multI", ins = [X, a]), \
+			  Expression(op = "multI", ins = [Y, b])) if a == b:
 			assert(not "TODO");
 		
 		# (addI X, a) - (multI Y, b) = (Y * -b + X) + a
@@ -78,7 +79,8 @@ def optimize_sub_vr(ops, et, lvn, rvn, out = None):
 		
 		# X - (addI Y, a) = (sub X, Y) - a
 		case (_, Expression(op = "addI", ins = [Y, b])):
-			assert(not "TODO");
+			subvn = optimize_sub_vr(ops, et, lvn, Y, out);
+			retval = consider(ops, et, "addI", (subvn, -b), out);
 		
 		# X - (multI Y, a) = X + (multI Y, -a)
 		case (_, Expression(op = "multI", ins = [Y, b])):

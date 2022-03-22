@@ -53,27 +53,45 @@ def InstructionCruciality_process(self, **_):
 		match inst.op:
 			case "loadI" | "ret":
 				pass;
-			case "iwrite" | "swrite" | "cbrne" | "cbr" | "i2i":
+			
+			case "iwrite" | "swrite" \
+				| "cbrne" | "cbr" \
+				| "load" | "fload" \
+				| "i2i" | "f2i" | "i2f":
 				src, = inst.ins;
 				submit(src);
+			
 			case "multI" | "addI" | "loadAI":
 				inner, const = inst.ins;
 				submit(inner);
+			
+			case "call":
+				for param in inst.ins:
+					submit(param);
+			
 			case "cbr_GT" | "cbr_GE" | "cbr_NE" | "cbr_EQ" | "cbr_LE" \
 					| "cmp_LE" \
-					| "loadAO" | "add":
+					| "loadAO" | "add" | "fadd" | "mult" | "fmult":
 				left, right = inst.ins;
 				submit(left);
 				submit(right);
+			
+			case "store":
+				value, dest = inst.ins;
+				submit(value);
+				submit(dest);
+			
 			case "storeAI":
 				value, base, offset = inst.ins;
 				submit(value);
 				submit(base);
+			
 			case "storeAO":
 				value, base, index = inst.ins;
 				submit(value);
 				submit(base);
 				submit(index);
+			
 			case _:
 				assert(not "TODO");
 		

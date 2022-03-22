@@ -20,7 +20,7 @@
 		  loadAI  %vr0, -4     => %vr9
 		  loadAI  %vr0, -8     => %vr12
 		  or      %vr9, %vr12 => %vr14
-		  cbrne   %vr14         -> .return
+		  cbrne   %vr14         -> .return1
 		# block.rpo = 3:
 		.L1:
 		  icall   gcd, %vr6, %vr8 => %vr17
@@ -32,19 +32,19 @@
 		  or      %vr18, %vr20 => %vr22
 		  cbr     %vr22         -> .L1
 		# block.rpo = 5:
-		.return:
+		.return1:
 		  ret
 	.frame gcd, 8 , %vr4, %vr5
-		# block.rpo = 7:
+		# block.rpo = 2:
 		  load    %vr5         => %vr6
 		  cbr     %vr6         -> .L2
-		# block.rpo = 8:
+		# block.rpo = 3:
 		  load    %vr4         => %vr10
 		  iret    %vr10              
-		# block.rpo = 12:
-		.return:
+		# block.rpo = 7:
+		.return2:
 		  ret
-		# block.rpo = 9:
+		# block.rpo = 4:
 		.L2:
 		  load    %vr4         => %vr11
 		  load    %vr5         => %vr12
@@ -53,4 +53,4 @@
 		  storeAI %vr13         => %vr0,     -4
 		  icall   gcd, %vr5, %vr15 => %vr16
 		  iret    %vr16              
-		  jumpI -> .return
+		  jumpI -> .return2

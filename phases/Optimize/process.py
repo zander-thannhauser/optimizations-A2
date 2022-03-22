@@ -38,6 +38,7 @@ from .instructions.swrite import optimize_swrite;
 
 from Instruction.self import Instruction;
 from ExpressionTable.Phi.self import Phi;
+from ExpressionTable.Constant.self import Constant;
 
 lookup = {
 	"add":    optimize_add,
@@ -107,13 +108,19 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 		# ask expression table for the value number behind each of the
 		# phi-nodes-that-I-feed's virtual registers, then
 		# new_instructions.append(those i2is);
-		for phi_num in block.outgoing_phis:
-			dprint(f"phi_num = {phi_num}");
-			phi = block.expression_table.vntoex(phi_num);
-			valnum = block.expression_table.vrtovn(phi.register);
-			i2i = Instruction("i2i", [valnum], phi_num);
-			new_instructions.append(i2i);
-			volatile_registers.add(phi_num);
+		
+		for out_reg in block.outs:
+			if out_reg in block.outgoing_phis:
+				src_valnum = block.expression_table.vrtovn(out_reg);
+				dst_valnum = block.outgoing_phis[out_reg];
+				dprint(f"dst_valnum, src_valnum = {dst_valnum, src_valnum}");
+				match block.expression_table.vntoex(src_valnum):
+					case Constant() as c:
+						appendme = Instruction("loadI", [c], dst_valnum);
+					case _:
+						appendme = Instruction("i2i", [src_valnum], dst_valnum);
+				new_instructions.append(appendme);
+				volatile_registers.add(dst_valnum);
 		
 		# it would be nice to have a second pass right here
 		# for any i2is, if they are the sole user of a definition,

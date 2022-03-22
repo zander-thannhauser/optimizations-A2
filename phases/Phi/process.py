@@ -24,7 +24,7 @@ def PhiPhase_process(self, expression_table, **_):
 			block.incoming_phis[register] = result.valnum;
 			if result.is_new:
 				for source in sources:
-					source.outgoing_phis.add(result.valnum);
+					source.outgoing_phis[register] = result.valnum;
 			
 	todo = [];
 	

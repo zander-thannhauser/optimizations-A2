@@ -20,14 +20,14 @@ def Block_init(self, label, instructions, children_labels, jump = None):
 	
 	# in-out phase:
 	self.ins = set();
-	self.outs = set();
+	self.outs = list(); # in order of occurrence
 	
 	# inheritance phase:
 	self.given = {};
 	
 	# phi phase:
 	self.incoming_phis = {}; # register -> phi valnum
-	self.outgoing_phis = set(); # phi valnums
+	self.outgoing_phis = {}; # register -> phi valnum
 	
 	# immedate dominator phase:
 	self.immedate_dominator = None;

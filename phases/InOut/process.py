@@ -25,7 +25,7 @@ def InOutPhase_process(self, all_blocks, **_):
 	block = self.block;
 	
 	ins = set();
-	outs = set();
+	outs = list();
 	
 	# union children's needs
 	for child in block.children:
@@ -37,7 +37,7 @@ def InOutPhase_process(self, all_blocks, **_):
 		# I'm the start block
 		# so I just magically provide %vr{0,1,2,3} + args
 		
-		outs.update(block.magic_provides);
+		outs = block.magic_provides;
 		
 		ins.difference_update(outs);
 		
@@ -61,8 +61,8 @@ def InOutPhase_process(self, all_blocks, **_):
 			if (inst.out in ins) or inst.op in \
 					["i2i", "iwrite", "iread", "store", "ret", "swrite", "call"]:
 				# either it's useful or protected:
-				if inst.op == "i2i":
-					outs.add(inst.out);
+				if inst.op == "i2i" and inst.out not in outs:
+					outs.insert(0, inst.out);
 				ins.discard(inst.out);
 				if inst.op != "loadI":
 					print(f"inst.ins = {inst.ins}");

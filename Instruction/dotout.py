@@ -139,8 +139,12 @@ def Instruction_dotout(self, stream):
 				case _:
 					assert(not "TODO");
 		
-		case "ret":
-			ins = ""
+		case "mod":
+			dprint(f"self.ins = {self.ins}");
+			left, right = self.ins;
+			connect_param(left, f"1", stream);
+			connect_param(right, f"2", stream);
+			ins = f"<1> %vr{left} | <2> %vr{right}";
 		
 		case "mult":
 			left, right = self.ins;
@@ -157,6 +161,9 @@ def Instruction_dotout(self, stream):
 			inner,  = self.ins;
 			connect_param(inner, f"1", stream);
 			ins = f"<1> %vr{inner}";
+		
+		case "ret":
+			ins = ""
 		
 		case "store":
 			value, dest = self.ins;

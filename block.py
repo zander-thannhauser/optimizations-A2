@@ -45,8 +45,8 @@ def read_block(t):
 				instructions.append(Instruction(operation, ins, out));
 			
 			# those who take two in and one out:
-			case "add" | "sub" | "mult" | "comp" \
-				| "fadd" | "fmult":
+			case "add" | "sub" | "mult" | "mod" | "comp" \
+					| "fadd" | "fmult":
 				ins.append(t.token); t.next();
 				assert(t.token == ","); t.next();
 				ins.append(t.token); t.next();

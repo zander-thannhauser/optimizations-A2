@@ -32,8 +32,9 @@ def InheritancePhase_process(self, **_):
 		
 		dprint(f"{block.rpo} onto {child.rpo}: changed = {changed}");
 		
-		if changed:
+		if changed or "inheritance" not in child.has_done:
 			todo.append(InheritancePhase(child));
+			child.has_done.add("inheritance");
 	
 	exit(f"return {[str(t) for t in todo]}");
 	return todo;

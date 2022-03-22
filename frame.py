@@ -126,11 +126,9 @@ def reverse_postorder_rank(b):
 def print_asm(block, p):
 	enter(f"print_asm(block.rpo = {block.rpo})");
 	
-	p.indent();
-	
 	p.comment("block.rpo = %i:", block.rpo);
 	
-	if block.label and len(block.parents) > 1:
+	if block.label:
 		p.printf("%s:", block.label, prefix = "");
 	
 	for inst in block.instructions:
@@ -161,8 +159,6 @@ def print_asm(block, p):
 			case conditions:
 				dprint(f"conditions = {conditions}");
 				assert(not "TODO");
-	
-	p.unindent();
 	
 	exit("return;");
 
@@ -216,7 +212,9 @@ def process_frame(t, p):
 			if me not in todo:
 				heappush(todo, me);
 	
-	print_asm(start, p);
+	p.indent();
+	print_asm(all_blocks[0], p);
+	p.unindent();
 	
 	exit("process_frame");
 	

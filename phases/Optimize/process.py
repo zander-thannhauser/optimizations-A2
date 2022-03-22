@@ -15,6 +15,7 @@ from .instructions.fmult  import optimize_fmult;
 from .instructions.i2f    import optimize_i2f;
 from .instructions.i2i    import optimize_i2i;
 from .instructions.loadI  import optimize_loadI;
+from .instructions.mod    import optimize_mod;
 from .instructions.mult   import optimize_mult;
 from .instructions.load   import optimize_load;
 from .instructions.nop    import optimize_nop;
@@ -46,6 +47,7 @@ lookup = {
 	"i2f":    optimize_i2f,
 	"i2i":    optimize_i2i,
 	"loadI":  optimize_loadI,
+	"mod":    optimize_mod,
 	"mult":   optimize_mult,
 	"load":   optimize_load,
 	"nop":    optimize_nop,
@@ -149,12 +151,22 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				case ("cbrne", "cbr_NE"): pass;
 				case ("cbrne", "cbr_EQ"): pass;
 				
-				# if a conditional-branch becomes nonconditional:
+				# fallthrough never happens, jump always happens:
+				# remove jump instruction, remove connection with fallthrough
+				# TODO: and push old paperwork phases.
+				
+				case ('cbrne' | 'cbr', 'jumpI'):
+					lose, keep = block.children;
+					lose.parents.remove(block);
+					block.children = [keep];
+					after = None;
+				
+				# fallthrough always happens, jump never happens:
 				# remove the jump instruction, have this block consider
 				# it's one parent as it's fallthrough.
-					# and push old paperwork phases.
+				# TODO: and push old paperwork phases.
 				
-				case ("cbr", "i2i"):
+				case ("cbr", "i2i" | "loadI"):
 					new_instructions.append(after);
 					keep, lose = block.children;
 					lose.parents.remove(block);

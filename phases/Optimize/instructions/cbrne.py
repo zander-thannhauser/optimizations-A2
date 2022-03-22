@@ -17,8 +17,8 @@ def optimize_cbrne(ops, et, ins, out, label, volatile):
 	match (et.vntoex(ivn)):
 		# constant-folding:
 		case Constant(value = c):
-			# if c: process_jumpI(ops, [], outs);
-			assert(not "TODO");
+			if not c:
+				ops.append(Instruction("jumpI", [], out, label));
 		
 		case Expression(op = "cmp_LT", ins = [X, Y]) \
 			if X not in volatile and Y not in volatile:

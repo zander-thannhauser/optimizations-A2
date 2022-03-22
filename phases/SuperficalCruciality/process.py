@@ -14,7 +14,7 @@ def SuperficalCruciality_process(self, **_):
 	
 	for inst in block.instructions:
 		match inst.op:
-			case "addI" | "add" | "fadd" | "mult" | "fmult" \
+			case "addI" | "add" | "fadd" | "mult" | "fmult" | "mod" \
 					| "load" | "fload" | "loadI" | "loadAI" \
 					| "comp" | "not" | "i2i" | "i2f" | "f2i" \
 					| "multI"  | "loadAO" \

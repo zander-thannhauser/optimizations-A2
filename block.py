@@ -37,7 +37,7 @@ def read_block(t):
 			# those who take one in and one out:
 			case "loadI" | "i2i" | "i2f" | "f2i" | "load" | "fload" \
 					| "testeq" | "testne" \
-					| "testgt" \
+					| "testgt" | "testge" \
 					| "testne" \
 					| "testlt" | "testle" :
 				ins.append(t.token); t.next();

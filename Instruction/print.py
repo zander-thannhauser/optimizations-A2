@@ -47,6 +47,7 @@ def Instruction_print(self, p):
 		case "i2i":     p.printf("i2i     %%vr%i         => %%vr%i", *self.ins, self.out);
 		
 		case "cmp_LE":  p.printf("cmp_LE  %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
+		case "cmp_LT":  p.printf("cmp_LT  %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		
 		case "cbr":     p.printf("cbr     %%vr%i         -> %s", *self.ins, self.label);
 		case "cbrne":   p.printf("cbrne   %%vr%i         -> %s", *self.ins, self.label);
@@ -55,6 +56,7 @@ def Instruction_print(self, p):
 		case "cbr_GE":  p.printf("cbr_GE  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
 		case "cbr_EQ":  p.printf("cbr_EQ  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
 		case "cbr_LE":  p.printf("cbr_LE  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
+		case "cbr_LT":  p.printf("cbr_LT  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
 		
 		case "ret":     p.printf("ret");
 		

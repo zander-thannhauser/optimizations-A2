@@ -11,7 +11,5 @@ def Instruction_init(self, op, ins, out, label = None):
 	
 	self.is_critical = False;
 	
-	self.acting_i2i = False;
-	
 	exit(f"return;");
 

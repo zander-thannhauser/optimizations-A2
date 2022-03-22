@@ -27,6 +27,7 @@ from .instructions.sub    import optimize_sub;
 from .instructions.store  import optimize_store;
 from .instructions.testeq import optimize_testeq;
 from .instructions.testne import optimize_testne;
+from .instructions.testge import optimize_testge;
 from .instructions.testgt import optimize_testgt;
 from .instructions.testlt import optimize_testlt;
 from .instructions.testle import optimize_testle;
@@ -64,6 +65,7 @@ lookup = {
 	"testeq": optimize_testeq,
 	"testne": optimize_testne,
 	"testgt": optimize_testgt,
+	"testge": optimize_testge,
 	"testlt": optimize_testlt,
 	"testle": optimize_testle,
 	"iwrite": optimize_iwrite,
@@ -147,8 +149,10 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				case _ if before.op == after.op: pass;
 				
 				case ("cbr", "cbr_GT"): pass;
+				case ("cbr", "cbr_GE"): pass;
 				case ("cbr", "cbr_NE"): pass;
 				case ("cbr", "cbr_LE"): pass;
+				case ("cbr", "cbr_LT"): pass;
 				
 				case ("cbr", "cbrne"): pass;
 				

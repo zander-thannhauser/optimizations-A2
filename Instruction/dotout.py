@@ -11,7 +11,7 @@ def Instruction_dotout(self, stream):
 #	dprint(f"self.ins = {self.ins}");
 #	dprint(f"self.out = {self.out}");
 	
-	if type(self.out) is int and not self.acting_i2i:
+	if type(self.out) is int:
 		me = self.out;
 		color = f"{self.out / ExpressionTable.valcounter} 1 1";
 	else:
@@ -41,8 +41,8 @@ def Instruction_dotout(self, stream):
 			connect_param(inner, f"1", stream);
 			ins = f"<1> %vr{inner}";
 		
-		case "cbr_GT" | "cbr_NE" | "cbr_GE" | "cbr_EQ" | "cbr_LE" \
-				| "cmp_GT" | "cmp_LT" | "cmp_EQ" | "cmp_NE" | "cmp_LE":
+		case  "cbr_GT" | "cbr_NE" | "cbr_LT" | "cbr_GE" | "cbr_EQ" | "cbr_LE" \
+			| "cmp_GT" | "cmp_NE" | "cmp_LT" | "cmp_GE" | "cmp_EQ" | "cmp_LE":
 			left, right = self.ins;
 			connect_param(left, f"1", stream);
 			connect_param(right, f"2", stream);
@@ -95,8 +95,14 @@ def Instruction_dotout(self, stream):
 		
 		case "i2i":
 			inner,  = self.ins;
+			me = id(self);
 			connect_param(inner, f"1", stream);
-			ins = f"<1> %vr{inner}";
+			ins = f"<1> {inner}";
+			phi_num = self.out;
+			color = f"{phi_num / ExpressionTable.valcounter} 1 1";
+			print(f"""
+				"{me}":s -> "{phi_num}" [color="{color}"];
+			""", file = stream);
 		
 		case "icall":
 			ins = f"{self.label}";

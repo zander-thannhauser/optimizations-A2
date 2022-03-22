@@ -18,7 +18,8 @@ def SuperficalCruciality_process(self, **_):
 					| "load" | "fload" | "loadI" | "loadAI" \
 					| "comp" | "not" | "or" | "i2i" | "i2f" | "f2i" \
 					| "multI"  | "loadAO" \
-					| "cmp_GT" | "cmp_EQ" | "cmp_LT" | "cmp_NE" | "cmp_LE":
+					| "cmp_GT" | "cmp_EQ" | "cmp_LT" | "cmp_NE" | "cmp_LE" \
+					| "cmp_GE":
 				pass;
 			case "call" | "icall"\
 				| "store" | "storeAI" | "storeAO" \
@@ -32,7 +33,7 @@ def SuperficalCruciality_process(self, **_):
 		match block.jump.op:
 			case "ret" | "iret":
 				todo.append(InstructionCruciality(block.jump, block));
-			case "cbr" | "cbr_GT" | "cbr_GE" | "cbr_LE" | "cbr_EQ" | "cbrne":
+			case "cbr" | "cbr_GT" | "cbr_GE" | "cbr_LE" | "cbr_EQ" | "cbr_LT" | "cbrne":
 				pass;
 			case jop:
 				dprint(f"jop = {jop}");

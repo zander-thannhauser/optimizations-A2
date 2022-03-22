@@ -84,3 +84,9 @@ BEGIN
   quicksort(A,1,19);
   writearray()
 END
+
+
+
+
+
+

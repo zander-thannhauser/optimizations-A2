@@ -103,26 +103,21 @@ def resolve_references(all_blocks):
 	
 	exit("return;");
 
-
-po_counter = 1;
-
-def postorder_rank(b):
-	global po_counter;
-	if b.po: return;
+def postorder_rank(b, x):
+	if b.po: return x;
 	b.po = 1;
-	for c in b.children: postorder_rank(c);
-	b.po = po_counter;
-	po_counter += 1;
+	for c in b.children: x = postorder_rank(c, x);
+	b.po = x;
+	x += 1;
+	return x;
 
-rpo_counter = 1;
-
-def reverse_postorder_rank(b):
-	global rpo_counter;
-	if b.rpo: return;
+def reverse_postorder_rank(b, x):
+	if b.rpo: return x;
 	b.rpo = 1;
-	for c in b.parents: reverse_postorder_rank(c);
-	b.rpo = rpo_counter;
-	rpo_counter += 1;
+	for c in b.parents: x = reverse_postorder_rank(c, x);
+	b.rpo = x;
+	x += 1;
+	return x;
 
 def print_asm(block, p):
 	enter(f"print_asm(block.rpo = {block.rpo})");
@@ -180,9 +175,9 @@ def process_frame(t, p):
 	
 	resolve_references(all_blocks);
 	
-	postorder_rank(start);
+	postorder_rank(start, 1);
 	
-	reverse_postorder_rank(end);
+	reverse_postorder_rank(end, 1);
 	
 	todo = [
 		## LostParentBlock()            # top-down

@@ -42,7 +42,7 @@
 		  load    %vr4         => %vr10
 		  iret    %vr10              
 		# block.rpo = 12:
-		.return2:
+		.return:
 		  ret
 		# block.rpo = 9:
 		.L2:
@@ -53,4 +53,4 @@
 		  storeAI %vr13         => %vr0,     -4
 		  icall   gcd, %vr5, %vr15 => %vr16
 		  iret    %vr16              
-		  jumpI -> .return2
+		  jumpI -> .return

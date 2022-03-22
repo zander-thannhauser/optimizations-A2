@@ -14,19 +14,20 @@
 		  loadI   0             -> %vr9
 		  i2i     %vr8         => %vr4
 		  i2i     %vr9         => %vr5
-		  i2i     %vr9         => %vr6
-		  i2i     %vr8         => %vr7
+		  i2i     %vr8         => %vr6
+		  i2i     %vr9         => %vr7
 		# block.rpo = 3:
 		.L1:
-		  iwrite  %vr5              
-		  add     %vr6, %vr4 => %vr12
-		  addI    %vr7, 1     => %vr13
+		  iwrite  %vr7              
+		  add     %vr5, %vr4 => %vr12
+		  addI    %vr6, 1     => %vr13
 		  loadI   19             -> %vr14
-		  cmp_LE  %vr7, %vr14 => %vr16
-		  i2i     %vr6         => %vr4
+		  cmp_LE  %vr6, %vr14 => %vr16
+		  i2i     %vr5         => %vr4
 		  i2i     %vr12         => %vr5
-		  i2i     %vr12         => %vr6
-		  i2i     %vr13         => %vr7
+		  i2i     %vr13         => %vr6
+		  i2i     %vr12         => %vr7
 		  cbr     %vr16         -> .L1
 		# block.rpo = 5:
+		.return:
 		  ret

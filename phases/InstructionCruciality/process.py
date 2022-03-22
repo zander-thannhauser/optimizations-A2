@@ -70,8 +70,8 @@ def InstructionCruciality_process(self, **_):
 				for param in inst.ins:
 					submit(param);
 			
-			case "cbr_GT" | "cbr_GE" | "cbr_NE" | "cbr_EQ" | "cbr_LE" \
-					| "cmp_LE" \
+			case   "cbr_GT" | "cbr_GE" | "cbr_NE" | "cbr_EQ" | "cbr_LE" | "cbr_LT" \
+				 | "cmp_LT" | "cmp_LE"\
 					| "loadAO" | "add" | "fadd" | "or" | "mult" | "fmult" | "mod":
 				left, right = inst.ins;
 				submit(left);

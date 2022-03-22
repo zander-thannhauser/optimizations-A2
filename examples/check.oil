@@ -19,12 +19,15 @@
 		  cbr_GE  %vr4, %vr8 -> .L2
 		# block.rpo = 5:
 		.L2:
-		  addI    %vr4, 1     => %vr4
+		  addI    %vr4, 1     => %vr12
 		  loadI   9             -> %vr13
 		  cmp_LE  %vr4, %vr13 => %vr15
+		  i2i     %vr12         => %vr4
 		  cbr     %vr15         -> .L1
 		# block.rpo = 6:
+		.L0:
 		  loadI   .string_const_0             -> %vr16
 		  swrite  %vr16              
 		# block.rpo = 7:
+		.return:
 		  ret

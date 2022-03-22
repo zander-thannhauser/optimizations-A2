@@ -22,8 +22,12 @@ def Instruction_print(self, p):
 		case "add":     p.printf("add     %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		case "fadd":    p.printf("fadd    %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		
+		case "or":      p.printf("or      %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
+		
 		case "mult":    p.printf("mult    %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		case "fmult":   p.printf("fmult   %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
+		
+		case "mod":     p.printf("mod     %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		
 		case "load":    p.printf("load    %%vr%i         => %%vr%i", *self.ins, self.out);
 		case "loadAI":  p.printf("loadAI  %%vr%i, %i     => %%vr%i", *self.ins, self.out);
@@ -37,6 +41,7 @@ def Instruction_print(self, p):
 		case "storeAO": p.printf("storeAO %%vr%i         => %%vr%i, %%vr%i", *self.ins);
 		
 		case "call":    p.printf("call    %s%s", self.label, "".join(f", %vr{i}" for i in self.ins));
+		case "icall":   p.printf("icall   %s%s => %%vr%i", self.label, "".join(f", %vr{i}" for i in self.ins), self.out);
 		
 		case "i2f":     p.printf("i2f     %%vr%i         => %%vr%i", *self.ins, self.out);
 		case "i2i":     p.printf("i2i     %%vr%i         => %%vr%i", *self.ins, self.out);
@@ -52,6 +57,10 @@ def Instruction_print(self, p):
 		case "cbr_LE":  p.printf("cbr_LE  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
 		
 		case "ret":     p.printf("ret");
+		
+		case "iret":    p.printf("iret    %%vr%i              ", *self.ins);
+		
+		case "iread":   p.printf("iread   %%vr%i              ", *self.ins);
 		
 		case "iwrite":  p.printf("iwrite  %%vr%i              ", *self.ins);
 		case "swrite":  p.printf("swrite  %%vr%i              ", *self.ins);

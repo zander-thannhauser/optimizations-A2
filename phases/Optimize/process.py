@@ -14,11 +14,15 @@ from .instructions.fload  import optimize_fload;
 from .instructions.fmult  import optimize_fmult;
 from .instructions.i2f    import optimize_i2f;
 from .instructions.i2i    import optimize_i2i;
+from .instructions.icall  import optimize_icall;
+from .instructions.iread  import optimize_iread;
+from .instructions.iret   import optimize_iret;
 from .instructions.loadI  import optimize_loadI;
 from .instructions.mod    import optimize_mod;
 from .instructions.mult   import optimize_mult;
 from .instructions.load   import optimize_load;
 from .instructions.nop    import optimize_nop;
+from .instructions._or    import optimize_or;
 from .instructions.sub    import optimize_sub;
 from .instructions.store  import optimize_store;
 from .instructions.testeq import optimize_testeq;
@@ -46,11 +50,15 @@ lookup = {
 	"fmult":  optimize_fmult,
 	"i2f":    optimize_i2f,
 	"i2i":    optimize_i2i,
+	"icall":  optimize_icall,
+	"iread":  optimize_iread,
+	"iret":   optimize_iret,
 	"loadI":  optimize_loadI,
 	"mod":    optimize_mod,
 	"mult":   optimize_mult,
 	"load":   optimize_load,
 	"nop":    optimize_nop,
+	"or":     optimize_or,
 	"store":  optimize_store,
 	"sub":    optimize_sub,
 	"testeq": optimize_testeq,

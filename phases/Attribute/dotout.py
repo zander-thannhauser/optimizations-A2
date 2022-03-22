@@ -9,6 +9,8 @@ def AttributePhase_dotout(self, all_blocks, **_):
 	
 	stream = open(f"gen/{Phase.counter}.txt", "w");
 	
+	dprint(f"Phase.counter = {Phase.counter}");
+	
 	print("""
 digraph mygraph {
 

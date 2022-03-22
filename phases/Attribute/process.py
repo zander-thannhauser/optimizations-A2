@@ -15,6 +15,8 @@ def AttributePhase_process(self, all_blocks, **_):
 	block.attributes["style"] = "filled";
 	block.attributes["fillcolor"] = f"{block.hue} 1 1";
 	
+	block.is_reachable = True;
+	
 	for child in block.children:
 		if "attributes" not in child.has_done:
 			todo.append(AttributePhase(child));

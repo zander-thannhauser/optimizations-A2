@@ -98,6 +98,23 @@ def Instruction_dotout(self, stream):
 			connect_param(inner, f"1", stream);
 			ins = f"<1> %vr{inner}";
 		
+		case "icall":
+			ins = f"{self.label}";
+			for i, param in enumerate(self.ins):
+				port = f"{i + 1}"
+				connect_param(param, port, stream);
+				ins += f" | <{port}> %vr{param}";
+		
+		case "iread":
+			inner,  = self.ins;
+			connect_param(inner, f"1", stream);
+			ins = f"<1> %vr{inner}";
+		
+		case "iret":
+			inner,  = self.ins;
+			connect_param(inner, f"1", stream);
+			ins = f"<1> %vr{inner}";
+		
 		case "iwrite":
 			inner,  = self.ins;
 			connect_param(inner, f"1", stream);
@@ -155,6 +172,12 @@ def Instruction_dotout(self, stream):
 			inner,  = self.ins;
 			connect_param(inner, f"1", stream);
 			ins = f"<1> %vr{inner}";
+		
+		case "or":
+			left, right = self.ins;
+			connect_param(left, f"1", stream);
+			connect_param(right, f"2", stream);
+			ins = f"<1> %vr{left} | <2> %vr{right}";
 		
 		case "ret":
 			ins = ""

@@ -59,7 +59,7 @@ def InOutPhase_process(self, all_blocks, **_):
 			# dprint(f"inst.out = {inst.out}");
 			
 			if (inst.out in ins) or inst.op in \
-					["i2i", "iwrite", "store", "ret", "swrite", "call"]:
+					["i2i", "iwrite", "iread", "store", "ret", "swrite", "call"]:
 				# either it's useful or protected:
 				if inst.op == "i2i":
 					outs.add(inst.out);

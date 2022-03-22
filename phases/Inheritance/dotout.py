@@ -23,30 +23,31 @@ digraph mygraph {
 	""", file = stream);
 	
 	for b in all_blocks:
-		attributes = b.attributes.copy();
-		
-		ins = " | ".join(f"<in_{r[1:]}> {r}" for r in b.ins);
-		
-		label = attributes["label"];
-		
-		outs = " | ".join(f"<out_{r[1:]}> {r}" for r in b.outs);
-		
-		attributes["label"] = "{ { " + ins + "} | " + label + " | { " + outs + " } }"
-		
-		print(f"""
-			\"{id(b)}\" [{' '.join(f'{k}="{v}"' for k, v in attributes.items())}];
-		""", file = stream);
-		
-		for c in b.children:
-			print(f"\"{id(b)}\":s -> \"{id(c)}\":n [style=bold]", file = stream);
-		
-		for r, ps in b.given.items():
-			for p in ps:
-				fillcolor = p.attributes["fillcolor"];
-				print(f"""
-					\"{id(p)}\":\"out_{r[1:]}\":s -> \"{id(b)}\":\"in_{r[1:]}\":n
-					 [style=dashed color=\"{fillcolor}\"]
-				""", file = stream);
+		if b.is_reachable:
+			attributes = b.attributes.copy();
+			
+			ins = " | ".join(f"<in_{r[1:]}> {r}" for r in b.ins);
+			
+			label = attributes["label"];
+			
+			outs = " | ".join(f"<out_{r[1:]}> {r}" for r in b.outs);
+			
+			attributes["label"] = "{ { " + ins + "} | " + label + " | { " + outs + " } }"
+			
+			print(f"""
+				\"{id(b)}\" [{' '.join(f'{k}="{v}"' for k, v in attributes.items())}];
+			""", file = stream);
+			
+			for c in b.children:
+				print(f"\"{id(b)}\":s -> \"{id(c)}\":n [style=bold]", file = stream);
+			
+			for r, ps in b.given.items():
+				for p in ps:
+					fillcolor = p.attributes["fillcolor"];
+					print(f"""
+						\"{id(p)}\":\"out_{r[1:]}\":s -> \"{id(b)}\":\"in_{r[1:]}\":n
+						 [style=dashed color=\"{fillcolor}\"]
+					""", file = stream);
 		
 	print("""
 }

@@ -10,18 +10,23 @@ def EmptyBlockRemoval_process(self, all_blocks, **_):
 	
 	block = self.block;
 	
-	if True \
-		and len(block.instructions) == 0 \
-		and block.jump is None:
+	if len(block.instructions) == 0 and block.jump is None:
+		
 		dprint(f"block.rpo = {block.rpo}");
 		
 		child, = block.children;
 		
 		for parent in block.parents:
 			dprint(f"block.label = {block.label}");
-			if parent.jump is not None and parent.jump.label == block.label:
-				assert(not "TODO");
-			parent.children[parent.children.index(block)] = child;
+			if parent.jump is None:
+				parent.children[0] = child;
+			elif parent.jump.label == block.label:
+				if not child.label:
+					assert(not "TODO");
+				parent.jump.label = child.label;
+				parent.children[1] = child;
+			else:
+				parent.children[parent.children.index(block)] = child;
 		
 		child.parents += block.parents;
 		child.immedate_dominator = block.immedate_dominator;

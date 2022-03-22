@@ -59,10 +59,10 @@ def setup_start_block(t, p, et):
 
 def setup_end_block():
 	ret = Instruction("ret", [], []);
-	end = Block("(return)", [], [], ret);
+	end = Block(".return", [], [], ret);
 	return end;
 
-def read_all_blocks(t, start, exit):
+def read_all_blocks(t, start, end):
 	all_blocks = [];
 	
 	all_blocks.append(start);
@@ -71,7 +71,7 @@ def read_all_blocks(t, start, exit):
 		b = read_block(t);
 		all_blocks.append(b);
 	
-	all_blocks.append(exit);
+	all_blocks.append(end);
 	
 	return all_blocks;
 
@@ -87,6 +87,7 @@ def resolve_references(all_blocks):
 	for i, b in enumerate(all_blocks):
 		children = [];
 		dprint(f"i = {i}");
+		dprint(f"b.label = {b.label}");
 		dprint(f"b.children_labels = {b.children_labels}");
 		for c in b.children_labels:
 			if c == "(fallthrough)":
@@ -128,7 +129,7 @@ def print_asm(block, p):
 	
 	p.comment("block.rpo = %i:", block.rpo);
 	
-	if block.label and block.label != "(return)":
+	if block.label:
 		p.printf("%s:", block.label, prefix = "");
 	
 	for inst in block.instructions:
@@ -145,7 +146,8 @@ def print_asm(block, p):
 			
 			# fallthrough child, assembly already printed
 			case (0, True):
-				assert(not "JumpI {child}");
+				assert(child.label);
+				p.printf("jumpI -> %s", child.label);
 			
 			# not fallthrough, assembly already printed
 			case (_, True):
@@ -165,6 +167,8 @@ def print_asm(block, p):
 def process_frame(t, p):
 	
 	enter("process_frame");
+	
+	ExpressionTable.valcounter = 0;
 	
 	et = ExpressionTable();
 	

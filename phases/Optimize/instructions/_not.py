@@ -13,12 +13,12 @@ def optimize_not_vr(ops, et, ivn, out):
 		case Expression(op = "not"):
 			assert(not "TODO");
 		
-		case Expression(op = "or"):
-			assert(not "TODO");
-		
-		case Expression(op = "and"):
-			assert(not "TODO");
-		
+#		case Expression(op = "or"):
+#			assert(not "TODO");
+#		
+#		case Expression(op = "and"):
+#			assert(not "TODO");
+#		
 		case Expression(op = "add"):
 			# not(or())
 			assert(not "TODO");

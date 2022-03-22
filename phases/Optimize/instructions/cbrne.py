@@ -79,9 +79,8 @@ def optimize_cbrne(ops, et, ins, out, label, volatile):
 			assert(not "TODO");
 		
 		case Expression(op = "not", ins = [X]) \
-			if X not in volatile and Y not in volatile:
-			# ops.append(("cbr", [X], "->", [out]));
-			assert(not "TODO");
+			if X not in volatile:
+			ops.append(Instruction("cbr", [X], out, label));
 		
 		# default:
 		case (iex):

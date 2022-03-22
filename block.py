@@ -19,6 +19,7 @@ def read_block(t):
 	instructions = [];
 	jump = None;
 	children = ["(fallthrough)"]; # indicates we also want fallthrough
+	return_register = None;
 	
 	while t.token and (t.token[0] != '.'):
 		operation = t.token; ins = []; out = None;
@@ -29,7 +30,7 @@ def read_block(t):
 		match (operation):
 			
 			# those who take one in and zero out:
-			case "iwrite" | "swrite":
+			case "iwrite" | "swrite" | "iread":
 				ins.append(t.token); t.next();
 				instructions.append(Instruction(operation, ins, out));
 			
@@ -46,7 +47,7 @@ def read_block(t):
 			
 			# those who take two in and one out:
 			case "add" | "sub" | "mult" | "mod" | "comp" \
-					| "fadd" | "fmult":
+					| "fadd" | "fmult" | "or":
 				ins.append(t.token); t.next();
 				assert(t.token == ","); t.next();
 				ins.append(t.token); t.next();
@@ -61,15 +62,6 @@ def read_block(t):
 				ins.append(t.token); t.next();
 				instructions.append(Instruction(operation, ins, out));
 			
-			# branching:
-			case "cbr" | "cbrne":
-				ins.append(t.token); t.next();
-				assert(t.token == "->"); t.next();
-				branch_label = t.token; t.next();
-				jump = Instruction(operation, ins, out, branch_label);
-				children.append(branch_label);
-				break;
-			
 			# calls:
 			case "call":
 				func_label = t.token
@@ -81,12 +73,46 @@ def read_block(t):
 				# dprint(f"ins = {ins}");
 				instructions.append(Instruction(operation, ins, out, func_label));
 			
+			case "icall":
+				func_label = t.token
+				t.next();
+				while t.token == ",":
+					t.next();
+					ins.append(t.token);
+					t.next();
+				dprint(f"ins = {ins}");
+				assert(t.token == "=>"); t.next();
+				out = t.token; t.next();
+				dprint(f"out = {out}");
+				instructions.append(Instruction(operation, ins, out, func_label));
+			
 			# nop:
 			case "nop": pass;
 			
+			# branching:
+			case "cbr" | "cbrne":
+				ins.append(t.token); t.next();
+				assert(t.token == "->"); t.next();
+				branch_label = t.token; t.next();
+				jump = Instruction(operation, ins, out, branch_label);
+				children.append(branch_label);
+				break;
+			
+			case "jumpI":
+				assert(t.token == "->"); t.next();
+				branch_label = t.token; t.next();
+				dprint(f"branch_label = {branch_label}");
+				children = [branch_label];
+				break;
+			
+			case "iret":
+				ins.append(t.token); t.next();
+				jump = Instruction(operation, ins, out, ".return");
+				children = [".return"];
+				break;
+			
 			case "ret":
-				# jump = Instruction("jumpI", ["(return)"], out);
-				children = ["(return)"];
+				children = [".return"];
 				break;
 			
 			case _:

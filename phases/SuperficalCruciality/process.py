@@ -16,13 +16,13 @@ def SuperficalCruciality_process(self, **_):
 		match inst.op:
 			case "addI" | "add" | "fadd" | "mult" | "fmult" | "mod" \
 					| "load" | "fload" | "loadI" | "loadAI" \
-					| "comp" | "not" | "i2i" | "i2f" | "f2i" \
+					| "comp" | "not" | "or" | "i2i" | "i2f" | "f2i" \
 					| "multI"  | "loadAO" \
 					| "cmp_GT" | "cmp_EQ" | "cmp_LT" | "cmp_NE" | "cmp_LE":
 				pass;
-			case "call" \
+			case "call" | "icall"\
 				| "store" | "storeAI" | "storeAO" \
-				| "iwrite" | "swrite":
+				| "iread" | "iwrite" | "swrite":
 				todo.append(InstructionCruciality(inst, block));
 			case _:
 				dprint(f"inst.op = {inst.op}");
@@ -30,7 +30,7 @@ def SuperficalCruciality_process(self, **_):
 	
 	if block.jump is not None:
 		match block.jump.op:
-			case "ret":
+			case "ret" | "iret":
 				todo.append(InstructionCruciality(block.jump, block));
 			case "cbr" | "cbr_GT" | "cbr_GE" | "cbr_LE" | "cbr_EQ" | "cbrne":
 				pass;

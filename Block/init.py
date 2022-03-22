@@ -14,6 +14,7 @@ def Block_init(self, label, instructions, children_labels, jump = None):
 	self.rpo = 0;
 	
 	# attribute phase:
+	self.is_reachable = False;
 	self.attributes = {};
 	self.has_done = set();
 	

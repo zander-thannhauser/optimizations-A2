@@ -22,25 +22,28 @@ digraph mygraph {
 	
 	""", file = stream);
 	
+	dprint(f"len(all_blocks) = {len(all_blocks)}");
+	
 	for b in all_blocks:
-		bid = id(b);
-		
-		attributes = b.attributes.copy();
-		
-		ins = " | ".join(b.ins);
-		
-		label = attributes["label"];
-		
-		outs = " | ".join(b.outs);
-		
-		attributes["label"] = "{ { " + ins + "} | " + label + " | { " + outs + " } }"
-		
-		print(f"""
-			\"{id(b)}\" [{' '.join(f'{k}="{v}"' for k, v in attributes.items())}];
-		""", file = stream);
-		
-		for c in b.children:
-			print(f"\"{bid}\":s -> \"{id(c)}\":n [style=bold]", file = stream);
+		if b.is_reachable:
+			bid = id(b);
+			
+			attributes = b.attributes.copy();
+			
+			ins = " | ".join(b.ins);
+			
+			label = attributes["label"];
+			
+			outs = " | ".join(b.outs);
+			
+			attributes["label"] = "{ { " + ins + "} | " + label + " | { " + outs + " } }"
+			
+			print(f"""
+				\"{id(b)}\" [{' '.join(f'{k}="{v}"' for k, v in attributes.items())}];
+			""", file = stream);
+			
+			for c in b.children:
+				print(f"\"{bid}\":s -> \"{id(c)}\":n [style=bold]", file = stream);
 		
 	print("""
 }

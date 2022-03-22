@@ -49,3 +49,24 @@ BEGIN
               WRITE(cost[m*m+n])
 
 END            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

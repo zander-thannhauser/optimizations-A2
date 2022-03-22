@@ -79,9 +79,10 @@ digraph mygraph {
 			if index < n:
 				print(f"\"{key}\":s -> \"{ids[index+1]}\":n;", file = stream);
 			else:
-				for child in block.children:
+				directions = [[""], ["s"], ["w", "e"]][len(block.children)];
+				for d, child in zip(directions, block.children):
 					first_id = all_instruction_ids[child.rpo][0];
-					print(f"\"{key}\":s -> \"{first_id}\":n;", file = stream);
+					print(f"\"{key}\":{d} -> \"{first_id}\":n;", file = stream);
 			
 	print("""
 }

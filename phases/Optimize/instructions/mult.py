@@ -39,11 +39,11 @@ def optimize_mult(ops, et, ins, out, label):
 				consider(ops, et, "addI", (subvn, a * b), out);
 			else:
 				assert(not "TODO");
-
+		
 		# a * (addI X, b) => addI (multI X, a), (a * b)
 		case (Constant(value = a), Expression(op = "addI", ins = [X, b])):
 			assert(not "TODO");
-
+		
 		# (multI X, a) * b => multI X, (a * b)
 		case (Expression(op = "multI", ins = [X, a]), Constant(value = b)):
 			consider(ops, et, "multI", (X, a * b), out);
@@ -51,21 +51,20 @@ def optimize_mult(ops, et, ins, out, label):
 		# a * (multI X, b) => multI X, (a * b)
 		case (Constant(value = a), Expression(op = "multI", ins = [X, b])):
 			assert(not "TODO");
-
+		
 		# (multI X, a) * (multI Y, b) => multI (mult X Y), (a * b)
 		case (Expression(op = "multI", ins = [X, a]), \
 				Expression(op = "multI", ins = [Y, b])):
 			assert(not "TODO");
-
+		
 		# mult X, c => multI X, c:
 		case (_, Constant(value = c)):
 			consider(ops, et, "multI", (lvn, c), out);
-
+		
 		# mult c, X => multI X, c:
 		case (Constant(value = c), _):
-			# consider(ops, ("multI", rvn, c), out);
-			assert(not "TODO");
-
+			consider(ops, et, "multI", (rvn, c), out);
+		
 #		# default:
 		case (lex, rex):
 			print(f"lex, rex = {lex}, {rex}");

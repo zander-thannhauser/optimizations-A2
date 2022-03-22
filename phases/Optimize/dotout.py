@@ -11,6 +11,8 @@ def OptimizePhase_dotout(self, all_blocks, expression_table, **_):
 	
 	enter("OptimizePhase.dotout()");
 	
+	dprint(f"Phase.counter = {Phase.counter}");
+	
 	stream = open(f"gen/{Phase.counter}.txt", "w");
 	
 	print("""

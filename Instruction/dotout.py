@@ -11,7 +11,7 @@ def Instruction_dotout(self, stream):
 #	dprint(f"self.ins = {self.ins}");
 #	dprint(f"self.out = {self.out}");
 	
-	if type(self.out) is int:
+	if type(self.out) is int and not self.acting_i2i:
 		me = self.out;
 		color = f"{self.out / ExpressionTable.valcounter} 1 1";
 	else:
@@ -95,14 +95,8 @@ def Instruction_dotout(self, stream):
 		
 		case "i2i":
 			inner,  = self.ins;
-			me = id(self);
 			connect_param(inner, f"1", stream);
 			ins = f"<1> %vr{inner}";
-			phi_num = self.out;
-			color = f"{phi_num / ExpressionTable.valcounter} 1 1";
-			print(f"""
-				"{me}":s -> "{phi_num}" [color="{color}"];
-			""", file = stream);
 		
 		case "iwrite":
 			inner,  = self.ins;

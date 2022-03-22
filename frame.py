@@ -128,7 +128,7 @@ def print_asm(block, p):
 	
 	p.comment("block.rpo = %i:", block.rpo);
 	
-	if block.label:
+	if block.label and block.label != "(return)":
 		p.printf("%s:", block.label, prefix = "");
 	
 	for inst in block.instructions:

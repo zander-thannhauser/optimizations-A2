@@ -104,13 +104,12 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 			i2i = Instruction("i2i", [valnum], phi_num);
 			new_instructions.append(i2i);
 			volatile_registers.add(phi_num);
-
-	#		# the paperwork for the expression_table will be handled at the usages'
-	#		# blocks. Inserting these i2i's will just be for the assembly.
-	#		# Globals work themselves out, only Phi nodes need this done.
-	#		# can't put the i2i's at the *very* end, you want one before the jump
-	#		# instruction.
-	#		# assert(not "TODO");
+		
+		# it would be nice to have a second pass right here
+		# for any i2is, if they are the sole user of a definition,
+		# change the definition to write to the phi node, remove
+		# the i2i
+		# assert(not "TODO");
 		
 		for instruction in new_instructions:
 			if type(instruction.out) is int:

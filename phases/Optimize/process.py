@@ -114,11 +114,12 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				src_valnum = block.expression_table.vrtovn(out_reg);
 				dst_valnum = block.outgoing_phis[out_reg];
 				dprint(f"dst_valnum, src_valnum = {dst_valnum, src_valnum}");
-				match block.expression_table.vntoex(src_valnum):
-					case Constant() as c:
-						appendme = Instruction("loadI", [c], dst_valnum);
-					case _:
-						appendme = Instruction("i2i", [src_valnum], dst_valnum);
+#				match block.expression_table.vntoex(src_valnum):
+#					case Constant() as c:
+#						appendme = Instruction("loadI", [c], dst_valnum);
+#					case _:
+#						appendme = Instruction("i2i", [src_valnum], dst_valnum);
+				appendme = Instruction("i2i", [src_valnum], dst_valnum);
 				new_instructions.append(appendme);
 				volatile_registers.add(dst_valnum);
 		

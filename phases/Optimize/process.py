@@ -138,7 +138,7 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 			
 			dprint(block.jump);
 			
-			wrote_i2is = len(block.outgoing_phis) > 0;
+			# wrote_i2is = len(block.outgoing_phis) > 0;
 			
 			lookup[before.op]( \
 				ops = new_instructions, \

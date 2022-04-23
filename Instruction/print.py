@@ -22,12 +22,16 @@ def Instruction_print(self, p):
 		case "add":     p.printf("add     %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		case "fadd":    p.printf("fadd    %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		
+		case "sub":     p.printf("sub     %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
+		
 		case "or":      p.printf("or      %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		
 		case "mult":    p.printf("mult    %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		case "fmult":   p.printf("fmult   %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		
 		case "mod":     p.printf("mod     %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
+		
+		case "rshiftI": p.printf("rshiftI %%vr%i, %i     => %%vr%i", *self.ins, self.out);
 		
 		case "load":    p.printf("load    %%vr%i         => %%vr%i", *self.ins, self.out);
 		case "loadAI":  p.printf("loadAI  %%vr%i, %i     => %%vr%i", *self.ins, self.out);
@@ -46,12 +50,15 @@ def Instruction_print(self, p):
 		case "i2f":     p.printf("i2f     %%vr%i         => %%vr%i", *self.ins, self.out);
 		case "i2i":     p.printf("i2i     %%vr%i         => %%vr%i", *self.ins, self.out);
 		
+		case "cmp_GE":  p.printf("cmp_GE  %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
+		case "cmp_GT":  p.printf("cmp_GT  %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		case "cmp_LE":  p.printf("cmp_LE  %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		case "cmp_LT":  p.printf("cmp_LT  %%vr%i, %%vr%i => %%vr%i", *self.ins, self.out);
 		
 		case "cbr":     p.printf("cbr     %%vr%i         -> %s", *self.ins, self.label);
 		case "cbrne":   p.printf("cbrne   %%vr%i         -> %s", *self.ins, self.label);
 		case "cbr_GT":  p.printf("cbr_GT  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
+		case "cbr_GE":  p.printf("cbr_GE  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
 		case "cbr_NE":  p.printf("cbr_NE  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
 		case "cbr_GE":  p.printf("cbr_GE  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
 		case "cbr_EQ":  p.printf("cbr_EQ  %%vr%i, %%vr%i -> %s", *self.ins, self.label);
@@ -66,6 +73,7 @@ def Instruction_print(self, p):
 		
 		case "iwrite":  p.printf("iwrite  %%vr%i              ", *self.ins);
 		case "swrite":  p.printf("swrite  %%vr%i              ", *self.ins);
+		case "putchar": p.printf("putchar %%vr%i              ", *self.ins);
 		
 		case _:
 			dprint(f"self.op == {self.op}");

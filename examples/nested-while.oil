@@ -1,0 +1,32 @@
+.data
+.text
+	.frame main, 12 
+		# block.rpo = 2:
+		  loadI   0             -> %vr6
+		  loadI   2             -> %vr9
+		  iwrite  %vr9              
+		  loadI   10             -> %vr10
+		  i2i     %vr6         => %vr4
+		# block.rpo = 3:
+		.L0:
+		  iwrite  %vr9              
+		  i2i     %vr6         => %vr5
+		# block.rpo = 4:
+		.L2:
+		  multI   %vr5, 2     => %vr15
+		  sub     %vr15, %vr5 => %vr18
+		  addI    %vr18, 2     => %vr19
+		  iwrite  %vr19              
+		  loadI   512             -> %vr20
+		  i2i     %vr20         => %vr5
+		# block.rpo = 5:
+		.L3:
+		  multI   %vr4, 2     => %vr22
+		  addI    %vr22, 2     => %vr23
+		  sub     %vr23, %vr4 => %vr24
+		  iwrite  %vr24              
+		  rshiftI %vr5, 1     => %vr25
+		  i2i     %vr25         => %vr4
+		  cbr_LT  %vr25, %vr10 -> .L0
+		# block.rpo = 7:
+		  ret

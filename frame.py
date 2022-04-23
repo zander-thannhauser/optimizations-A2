@@ -124,7 +124,7 @@ def print_asm(block, p):
 	
 	p.comment("block.rpo = %i:", block.rpo);
 	
-	if block.label:
+	if block.label and block.label != ".return":
 		p.printf("%s:", block.label, prefix = "");
 	
 	for inst in block.instructions:
@@ -142,7 +142,10 @@ def print_asm(block, p):
 			# fallthrough child, assembly already printed
 			case (0, True):
 				assert(child.label);
-				p.printf("jumpI -> %s", child.label);
+				if child.label == ".return":
+					p.printf("ret");
+				else:
+					p.printf("jumpI -> %s", child.label);
 			
 			# not fallthrough, assembly already printed
 			case (_, True):

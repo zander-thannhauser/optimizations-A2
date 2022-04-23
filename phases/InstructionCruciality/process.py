@@ -54,7 +54,7 @@ def InstructionCruciality_process(self, **_):
 			case "loadI" | "ret":
 				pass;
 			
-			case "iwrite" | "swrite" \
+			case "iwrite" | "swrite" | "putchar"\
 				| "cbrne" | "cbr" \
 				| "load" | "fload" \
 				| "i2i" | "f2i" | "i2f" | "iread" \
@@ -62,7 +62,7 @@ def InstructionCruciality_process(self, **_):
 				src, = inst.ins;
 				submit(src);
 			
-			case "multI" | "addI" | "loadAI":
+			case "multI" | "addI" | "loadAI" | "rshiftI":
 				inner, const = inst.ins;
 				submit(inner);
 			
@@ -71,7 +71,7 @@ def InstructionCruciality_process(self, **_):
 					submit(param);
 			
 			case   "cbr_GT" | "cbr_GE" | "cbr_NE" | "cbr_EQ" | "cbr_LE" | "cbr_LT" \
-				 | "cmp_LT" | "cmp_LE"\
+				 | "cmp_GT" | "cmp_LT" | "cmp_GE" | "cmp_LE" | "sub"\
 					| "loadAO" | "add" | "fadd" | "or" | "mult" | "fmult" | "mod":
 				left, right = inst.ins;
 				submit(left);

@@ -17,13 +17,13 @@ def SuperficalCruciality_process(self, **_):
 			case "addI" | "add" | "fadd" | "mult" | "fmult" | "mod" \
 					| "load" | "fload" | "loadI" | "loadAI" \
 					| "comp" | "not" | "or" | "i2i" | "i2f" | "f2i" \
-					| "multI"  | "loadAO" \
+					| "multI"  | "loadAO" | "sub" | "rshiftI"\
 					| "cmp_GT" | "cmp_EQ" | "cmp_LT" | "cmp_NE" | "cmp_LE" \
 					| "cmp_GE":
 				pass;
 			case "call" | "icall"\
 				| "store" | "storeAI" | "storeAO" \
-				| "iread" | "iwrite" | "swrite":
+				| "iread" | "iwrite" | "swrite" | "putchar":
 				todo.append(InstructionCruciality(inst, block));
 			case _:
 				dprint(f"inst.op = {inst.op}");

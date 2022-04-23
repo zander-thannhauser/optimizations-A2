@@ -94,8 +94,7 @@ def optimize_sub_vr(ops, et, lvn, rvn, out = None):
 		# default:
 		case (lex, rex):
 			dprint(f"lex, rex = {str(lex), str(rex)}");
-			# consider(ops, ("sub", lvn, rvn), out);
-			assert(not "TODO");
+			retval = consider(ops, et, "sub", (lvn, rvn), out);
 	
 	exit(f"return {retval};");
 	return retval;

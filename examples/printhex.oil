@@ -1,0 +1,40 @@
+.data
+.text
+	.frame printhex_recursive, 4 , %vr4
+		# block.rpo = 2:
+		  loadI   16             -> %vr5
+		  mod     %vr4, %vr5 => %vr6
+		  cbr_LT  %vr4, %vr5 -> .L1
+		# block.rpo = 3:
+		  rshiftI %vr4, 4     => %vr10
+		  call    printhex_recursive, %vr10
+		# block.rpo = 4:
+		.L1:
+		  loadI   10             -> %vr11
+		  cbr_GE  %vr6, %vr11 -> .L2
+		# block.rpo = 5:
+		  addI    %vr6, 48     => %vr15
+		  putchar %vr15              
+		# block.rpo = 9:
+		  ret
+		# block.rpo = 6:
+		.L2:
+		  addI    %vr6, 55     => %vr18
+		  putchar %vr18              
+		  ret
+	.frame printhex, 0 , %vr4
+		# block.rpo = 2:
+		  call    printhex_recursive, %vr4
+		  loadI   10             -> %vr5
+		  putchar %vr5              
+		# block.rpo = 3:
+		  ret
+	.frame main, 4 
+		# block.rpo = 2:
+		  loadI   0             -> %vr4
+		  store   %vr4         => %vr0
+		  iread   %vr0              
+		  load    %vr0         => %vr5
+		  call    printhex, %vr5
+		# block.rpo = 3:
+		  ret

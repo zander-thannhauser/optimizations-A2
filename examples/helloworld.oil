@@ -6,5 +6,4 @@
 		  loadI   .string_const_0             -> %vr4
 		  swrite  %vr4              
 		# block.rpo = 3:
-		.return:
 		  ret

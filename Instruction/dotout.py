@@ -218,6 +218,16 @@ def Instruction_dotout(self, stream):
 			connect_param(inner, f"1", stream);
 			ins = f"<1> %vr{inner}";
 		
+		case "rshiftI":
+			value, const = self.ins;
+			connect_param(value, f"1", stream);
+			ins = f"<1> %vr{value} | <2> {const}";
+		
+		case "putchar":
+			inner,  = self.ins;
+			connect_param(inner, f"1", stream);
+			ins = f"<1> %vr{inner}";
+		
 		case _:
 			dprint(f"self.op == {self.op}");
 			assert(not "TODO");

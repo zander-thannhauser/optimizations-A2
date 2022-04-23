@@ -30,7 +30,7 @@ def read_block(t):
 		match (operation):
 			
 			# those who take one in and zero out:
-			case "iwrite" | "swrite" | "iread":
+			case "iwrite" | "swrite" | "iread" | "putchar":
 				ins.append(t.token); t.next();
 				instructions.append(Instruction(operation, ins, out));
 			
@@ -47,7 +47,7 @@ def read_block(t):
 			
 			# those who take two in and one out:
 			case "add" | "sub" | "mult" | "mod" | "comp" \
-					| "fadd" | "fmult" | "or":
+					| "fadd" | "fmult" | "or" | "rshift":
 				ins.append(t.token); t.next();
 				assert(t.token == ","); t.next();
 				ins.append(t.token); t.next();

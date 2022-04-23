@@ -104,5 +104,4 @@
 		  loadAI  %vr0, -3960     => %vr127
 		  iwrite  %vr127              
 		# block.rpo = 17:
-		.return:
 		  ret

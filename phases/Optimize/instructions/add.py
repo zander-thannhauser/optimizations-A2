@@ -34,7 +34,10 @@ def optimize_add_vr(ops, et, lvn, rvn, out = None):
 		
 		# a + (addI X, b) => addI X, (a + b)
 		case (Constant(value = a), Expression(op = "addI", ins = [X, b])):
-			assert(not "TODO");
+			if a + b == 0:
+				assert(not "TODO");
+			else:
+				retval = consider(ops, et, "addI", (X, a + b), out);
 		
 #		# (sub X, Y) + Y => X
 		case (Expression(op = "sub", ins = [X, Y]), _) if Y == rvn:

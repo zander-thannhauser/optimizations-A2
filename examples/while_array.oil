@@ -10,8 +10,9 @@
 .text
 	.frame main, 44 
 		# block.rpo = 2:
+		  loadI   1             -> %vr6
 		  loadI   0             -> %vr9
-		  loadI   1             -> %vr4
+		  i2i     %vr6         => %vr4
 		# block.rpo = 3:
 		.L1:
 		  multI   %vr4, -4     => %vr16
@@ -23,7 +24,7 @@
 		  cbr     %vr21         -> .L1
 		# block.rpo = 4:
 		.L0:
-		  loadI   1             -> %vr5
+		  i2i     %vr6         => %vr5
 		# block.rpo = 5:
 		.L3:
 		  loadI   5             -> %vr22
@@ -40,7 +41,6 @@
 		  i2i     %vr34         => %vr5
 		  cbr     %vr37         -> .L3
 		# block.rpo = 10:
-		.return:
 		  ret
 		# block.rpo = 7:
 		.L4:

@@ -1,0 +1,4 @@
+.data
+	   .string     .str_const_0, "howdy"
+.text
+	.frame main, 16 

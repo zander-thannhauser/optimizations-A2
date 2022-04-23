@@ -3,76 +3,80 @@ from debug import *;
 
 from .self import OptimizePhase;
 
-from .instructions.add    import optimize_add;
-from .instructions.call   import optimize_call;
-from .instructions.cbr    import optimize_cbr;
-from .instructions.cbrne  import optimize_cbrne;
-from .instructions.comp   import optimize_comp;
-from .instructions.f2i    import optimize_f2i;
-from .instructions.fadd   import optimize_fadd;
-from .instructions.fload  import optimize_fload;
-from .instructions.fmult  import optimize_fmult;
-from .instructions.i2f    import optimize_i2f;
-from .instructions.i2i    import optimize_i2i;
-from .instructions.icall  import optimize_icall;
-from .instructions.iread  import optimize_iread;
-from .instructions.iret   import optimize_iret;
-from .instructions.loadI  import optimize_loadI;
-from .instructions.mod    import optimize_mod;
-from .instructions.mult   import optimize_mult;
-from .instructions.load   import optimize_load;
-from .instructions.nop    import optimize_nop;
-from .instructions._or    import optimize_or;
-from .instructions.sub    import optimize_sub;
-from .instructions.store  import optimize_store;
-from .instructions.testeq import optimize_testeq;
-from .instructions.testne import optimize_testne;
-from .instructions.testge import optimize_testge;
-from .instructions.testgt import optimize_testgt;
-from .instructions.testlt import optimize_testlt;
-from .instructions.testle import optimize_testle;
-from .instructions.iwrite import optimize_iwrite;
-from .instructions.jumpI  import optimize_jumpI;
-from .instructions.ret    import optimize_ret;
-from .instructions.swrite import optimize_swrite;
+from .instructions.add     import optimize_add;
+from .instructions.call    import optimize_call;
+from .instructions.cbr     import optimize_cbr;
+from .instructions.cbrne   import optimize_cbrne;
+from .instructions.comp    import optimize_comp;
+from .instructions.f2i     import optimize_f2i;
+from .instructions.fadd    import optimize_fadd;
+from .instructions.fload   import optimize_fload;
+from .instructions.fmult   import optimize_fmult;
+from .instructions.i2f     import optimize_i2f;
+from .instructions.i2i     import optimize_i2i;
+from .instructions.icall   import optimize_icall;
+from .instructions.iread   import optimize_iread;
+from .instructions.iret    import optimize_iret;
+from .instructions.loadI   import optimize_loadI;
+from .instructions.mod     import optimize_mod;
+from .instructions.mult    import optimize_mult;
+from .instructions.load    import optimize_load;
+from .instructions.nop     import optimize_nop;
+from .instructions._or     import optimize_or;
+from .instructions.putchar import optimize_putchar;
+from .instructions.rshift  import optimize_rshift;
+from .instructions.sub     import optimize_sub;
+from .instructions.store   import optimize_store;
+from .instructions.testeq  import optimize_testeq;
+from .instructions.testne  import optimize_testne;
+from .instructions.testge  import optimize_testge;
+from .instructions.testgt  import optimize_testgt;
+from .instructions.testlt  import optimize_testlt;
+from .instructions.testle  import optimize_testle;
+from .instructions.iwrite  import optimize_iwrite;
+from .instructions.jumpI   import optimize_jumpI;
+from .instructions.ret     import optimize_ret;
+from .instructions.swrite  import optimize_swrite;
 
 from Instruction.self import Instruction;
 from ExpressionTable.Phi.self import Phi;
 from ExpressionTable.Constant.self import Constant;
 
 lookup = {
-	"add":    optimize_add,
-	"call":   optimize_call,
-	"cbr":    optimize_cbr,
-	"cbrne":  optimize_cbrne,
-	"comp":   optimize_comp,
-	"f2i":    optimize_f2i,
-	"fadd":   optimize_fadd,
-	"fload":  optimize_fload,
-	"fmult":  optimize_fmult,
-	"i2f":    optimize_i2f,
-	"i2i":    optimize_i2i,
-	"icall":  optimize_icall,
-	"iread":  optimize_iread,
-	"iret":   optimize_iret,
-	"loadI":  optimize_loadI,
-	"mod":    optimize_mod,
-	"mult":   optimize_mult,
-	"load":   optimize_load,
-	"nop":    optimize_nop,
-	"or":     optimize_or,
-	"store":  optimize_store,
-	"sub":    optimize_sub,
-	"testeq": optimize_testeq,
-	"testne": optimize_testne,
-	"testgt": optimize_testgt,
-	"testge": optimize_testge,
-	"testlt": optimize_testlt,
-	"testle": optimize_testle,
-	"iwrite": optimize_iwrite,
-	"jumpI":  optimize_jumpI,
-	"ret":    optimize_ret,
-	"swrite": optimize_swrite,
+	"add":     optimize_add,
+	"call":    optimize_call,
+	"cbr":     optimize_cbr,
+	"cbrne":   optimize_cbrne,
+	"comp":    optimize_comp,
+	"f2i":     optimize_f2i,
+	"fadd":    optimize_fadd,
+	"fload":   optimize_fload,
+	"fmult":   optimize_fmult,
+	"i2f":     optimize_i2f,
+	"i2i":     optimize_i2i,
+	"icall":   optimize_icall,
+	"iread":   optimize_iread,
+	"iret":    optimize_iret,
+	"loadI":   optimize_loadI,
+	"mod":     optimize_mod,
+	"mult":    optimize_mult,
+	"load":    optimize_load,
+	"nop":     optimize_nop,
+	"or":      optimize_or,
+	"putchar": optimize_putchar,
+	"rshift":  optimize_rshift,
+	"store":   optimize_store,
+	"sub":     optimize_sub,
+	"testeq":  optimize_testeq,
+	"testne":  optimize_testne,
+	"testgt":  optimize_testgt,
+	"testge":  optimize_testge,
+	"testlt":  optimize_testlt,
+	"testle":  optimize_testle,
+	"iwrite":  optimize_iwrite,
+	"jumpI":   optimize_jumpI,
+	"ret":     optimize_ret,
+	"swrite":  optimize_swrite,
 };
 
 def OptimizePhase_process(self, all_blocks, expression_table, **_):
@@ -169,6 +173,7 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				case ("cbrne", "cbr_GT"): pass;
 				case ("cbrne", "cbr_NE"): pass;
 				case ("cbrne", "cbr_EQ"): pass;
+				case ("cbrne", "cbr_LT"): pass;
 				
 				# fallthrough never happens, jump always happens:
 				# remove jump instruction, remove connection with fallthrough
@@ -185,7 +190,7 @@ def OptimizePhase_process(self, all_blocks, expression_table, **_):
 				# it's one parent as it's fallthrough.
 				# TODO: and push old paperwork phases.
 				
-				case ("cbr", "i2i" | "loadI"):
+				case ("cbr" | "cbrne", "i2i" | "loadI"):
 					new_instructions.append(after);
 					keep, lose = block.children;
 					lose.parents.remove(block);

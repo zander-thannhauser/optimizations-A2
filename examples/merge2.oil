@@ -1,0 +1,42 @@
+.data
+.text
+	.frame merge, 4 , %vr4, %vr5
+		# block.rpo = 2:
+		  loadI   1             -> %vr8
+		  loadI   3             -> %vr9
+		  i2i     %vr8         => %vr6
+		  cbr_LE  %vr4, %vr9 -> .L0
+		# block.rpo = 3:
+		  cbr_GE  %vr5, %vr9 -> .L2
+		# block.rpo = 4:
+		  iwrite  %vr6              
+		# block.rpo = 7:
+		.L3:
+		  iwrite  %vr6              
+		# block.rpo = 15:
+		  ret
+		# block.rpo = 5:
+		.L2:
+		  i2i     %vr9         => %vr6
+		  jumpI -> .L3
+		# block.rpo = 8:
+		.L0:
+		  cbr_GE  %vr5, %vr9 -> .L6
+		# block.rpo = 9:
+		  loadI   2             -> %vr16
+		  i2i     %vr16         => %vr7
+		# block.rpo = 12:
+		.L7:
+		  iwrite  %vr7              
+		  ret
+		# block.rpo = 10:
+		.L6:
+		  i2i     %vr9         => %vr7
+		  jumpI -> .L7
+	.frame main, 0 
+		# block.rpo = 2:
+		  loadI   4             -> %vr4
+		  loadI   5             -> %vr5
+		  call    merge, %vr4, %vr5
+		# block.rpo = 3:
+		  ret

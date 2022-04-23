@@ -42,7 +42,11 @@ def optimize_mult(ops, et, ins, out, label):
 		
 		# a * (addI X, b) => addI (multI X, a), (a * b)
 		case (Constant(value = a), Expression(op = "addI", ins = [X, b])):
-			assert(not "TODO");
+			if a * b:
+				subvn = consider(ops, et, "multI", (X, a));
+				consider(ops, et, "addI", (subvn, a * b), out);
+			else:
+				assert(not "TODO");
 		
 		# (multI X, a) * b => multI X, (a * b)
 		case (Expression(op = "multI", ins = [X, a]), Constant(value = b)):

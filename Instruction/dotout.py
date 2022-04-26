@@ -19,6 +19,7 @@ def Instruction_dotout(self, stream):
 		color = "white";
 	
 	def connect_param(src, port, stream):
+		dprint(f"src = {src}")
 		color = f"{src / ExpressionTable.valcounter} 1 1";
 		print(f"""
 			"{src}":s -> "{me}":{port}:n [color="{color}"];

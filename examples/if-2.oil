@@ -1,0 +1,21 @@
+.data
+.text
+	.frame test, 0 , %vr4, %vr5
+		# block.rpo = 2:
+		  cbrne   %vr5         -> .L1
+		# block.rpo = 3:
+		  addI    %vr4, 2     => %vr10
+		  iwrite  %vr10              
+		# block.rpo = 6:
+		.L1:
+		  addI    %vr4, 2     => %vr14
+		  iwrite  %vr14              
+		# block.rpo = 7:
+		  ret
+	.frame main, 0 
+		# block.rpo = 2:
+		  loadI   2             -> %vr4
+		  loadI   3             -> %vr5
+		  call    test, %vr4, %vr5
+		# block.rpo = 3:
+		  ret

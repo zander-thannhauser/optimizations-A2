@@ -23,7 +23,7 @@ def optimize_sub_vr(ops, et, lvn, rvn, out = None):
 			retval = et.avrwvn(out, lvn);
 		
 		case (Constant(value = 0), _):
-			assert(not "TODO");
+			retval = consider(ops, et, "multI", (rvn, -1), out);
 		
 		# X - X = 0
 		case (_, _) if lvn == rvn:

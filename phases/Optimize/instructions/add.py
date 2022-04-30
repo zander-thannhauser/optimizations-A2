@@ -56,9 +56,14 @@ def optimize_add_vr(ops, et, lvn, rvn, out = None):
 				subvn = optimize_add_vr(ops, et, X, Y);
 				retval = consider(ops, et, "addI", (subvn, a + b), out);
 		
+		# (multI X, a) + (multI, X, b) => multI X, (a + b)
+		case (Expression(op = "multI", ins = [X, a]), \
+			  Expression(op = "multI", ins = [Y, b])) if X == Y:
+			retval = consider(ops, et, "multI", (X, a + b), out);
+			
 		# (multI X, a) + (multI, Y, a) => multI (add X, Y), a
 		case (Expression(op = "multI", ins = [X, a]), \
-			  Expression(op = "multI", ins = [Y, b])):
+			  Expression(op = "multI", ins = [Y, b])) if a == b:
 			assert(not "TODO");
 		
 		# (addI X, a) + Y => addI (add X, Y), a
